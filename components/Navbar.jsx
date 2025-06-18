@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+"use client";
+
+import { useState, useEffect, useRef } from "react";
 import {
   motion,
   AnimatePresence,
@@ -469,22 +471,37 @@ const ElegantNavbar = () => {
   ];
 
   const handleNavClick = (path) => {
+    // Close mobile menu first
     setIsMobileMenuOpen(false);
+    // Navigate immediately
     navigate(path);
   };
 
   const handleLogoClick = () => {
+    setIsMobileMenuOpen(false);
     navigate("/");
+  };
+
+  const toggleMobileMenu = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleMobileBackdropClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsMobileMenuOpen(false);
   };
 
   return (
     <>
       <motion.header
         style={{
-          backdropFilter: `blur(${headerBlur}px)`,
+          backdropFilter: `blur(${isMobileMenuOpen ? 4 : headerBlur}px)`,
           opacity: headerOpacity,
         }}
-        className={`top-0 bg-black left-0 right-0 z-50 transition-all duration-700 `}
+        className="fixed top-0 bg-black/90 left-0 right-0 z-50 transition-all duration-700"
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
@@ -502,7 +519,6 @@ const ElegantNavbar = () => {
             <motion.div
               className="flex items-center space-x-3 cursor-pointer group"
               whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
               initial={{ scale: 0, rotate: -180 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ duration: 1.2, ease: "backOut" }}
@@ -513,7 +529,7 @@ const ElegantNavbar = () => {
                 whileHover={{ rotate: 10, scale: 1.1 }}
                 transition={{ duration: 0.3 }}
               >
-                <img src="logo.png" alt="" />
+                <img src="logo.png" alt="Nivaasa Logo" />
               </motion.div>
 
               <motion.div>
@@ -620,8 +636,8 @@ const ElegantNavbar = () => {
 
             {/* Mobile Menu Button */}
             <motion.button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden flex items-center space-x-3 p-3 rounded-xl border border-white/20 hover:border-amber-400/50 backdrop-blur-sm transition-all duration-300 group"
+              onClick={toggleMobileMenu}
+              className="lg:hidden flex items-center space-x-3 p-3 rounded-xl border border-white/20 hover:border-amber-400/50 backdrop-blur-sm transition-all duration-300 group relative z-[60]"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               initial={{ opacity: 0, scale: 0 }}
@@ -673,10 +689,10 @@ const ElegantNavbar = () => {
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="lg:hidden overflow-hidden"
+                className="lg:hidden overflow-hidden relative z-[55]"
               >
                 <motion.div
-                  className="py-6 border-t border-white/10"
+                  className="py-6 border-t border-white/10 bg-black/95 backdrop-blur-md"
                   initial={{ y: -20 }}
                   animate={{ y: 0 }}
                   transition={{ delay: 0.1, duration: 0.3 }}
@@ -731,7 +747,7 @@ const ElegantNavbar = () => {
                           animate={{ scale: [1, 1.3, 1] }}
                           transition={{
                             duration: 2,
-                            repeat: Infinity,
+                            repeat: Number.POSITIVE_INFINITY,
                             ease: "easeInOut",
                           }}
                         />
@@ -749,11 +765,11 @@ const ElegantNavbar = () => {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            className="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            className="lg:hidden fixed inset-0 bg-black/40 z-40"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setIsMobileMenuOpen(false)}
+            onClick={handleMobileBackdropClick}
           />
         )}
       </AnimatePresence>

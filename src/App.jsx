@@ -13,25 +13,25 @@ import TestimonialsSection from "../components/testimonials-section";
 import VisionSection from "../components/vision-section";
 import WhyNivaasaSection from "../components/why-section";
 
-const MainApp = () => {
-  return (
-    <>
-      <Navbar />
-      <HeroSection />
-      <Para1 />
-      <Para2 />
-      <ExploreSection />
-      <AboutUsSection />
-      <WhyNivaasaSection />
-      <VisionSection />
-      <BlogHead />
-      <BlogSection />
-      <PropertyShowcase />
-      <TestimonialsSection />
-      <Footer />
-    </>
-  );
-};
+// const MainApp = () => {
+//   return (
+//     <>
+//       <Navbar />
+//       <HeroSection />
+//       <Para1 />
+//       <Para2 />
+//       <ExploreSection />
+//       <AboutUsSection />
+//       <WhyNivaasaSection />
+//       <VisionSection />
+//       <BlogHead />
+//       <BlogSection />
+//       <PropertyShowcase />
+//       <TestimonialsSection />
+//       <Footer />
+//     </>
+//   );
+// };
 
 const HomePage = () => {
   return (

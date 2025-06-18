@@ -1,132 +1,845 @@
 "use client";
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
-/**
- * Luxury Real Estate Showcase - Exact Image Replication
- * Three premium property developments with precise layout matching
- */
 const ExploreSection = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
-
-  /**
-   * Property data matching the exact image content
-   */
   const properties = [
     {
       id: "axis",
       location: "NOIDA",
       title: "NIVAASA AXIS",
+      subtitle: "Contemporary Villas",
       description:
-        "Nivaasa Axis is a curated collection of contemporary Villas in Noida, designed to offer a rare blend of privacy, natural light, and architectural clarity. With open courtyards, large windows, and thoughtfully planned layouts. Surrounded by greenery and calm, it's a modern sanctuary crafted for those who value space, design, and serenity in everyday living.",
+        "Nivaasa Axis is a curated collection of contemporary Villas in Noida, designed to offer a rare blend of privacy, natural light, and architectural clarity. With open courtyards, large windows, and thoughtfully planned layouts.",
       image: "/explore-1.png",
-      bgPattern: "geometric-dark",
+      accent: "#fdc700",
+      gradient: "from-yellow-900/20 via-yellow-800/10 to-transparent",
+      features: ["Private Courtyards", "Natural Light", "Modern Architecture"],
     },
     {
       id: "retreat",
       location: "GURGAON",
       title: "NIVAASA RETREAT",
+      subtitle: "Aravalli Hills Getaway",
       description:
-        "Nivaasa Retreat is a premium Airbb getaway nestled in the tranquil embrace of the Aravalli Hills. Designed for those seeking quiet luxury, it offers a perfect blend of nature, comfort, and curated experiences. Surrounded by rolling greens and panoramic hill views, each stay is crafted to bring a sense of calm and connection-with beautifully designed interiors, open-air spaces, and personalized hospitality.",
+        "Nivaasa Retreat is a premium Airbnb getaway nestled in the tranquil embrace of the Aravalli Hills. Designed for those seeking quiet luxury, it offers a perfect blend of nature, comfort, and curated experiences.",
       image: "/explore-2.png",
-      bgPattern: "geometric-warm",
+      accent: "#fdc700",
+      gradient: "from-yellow-900/20 via-yellow-800/10 to-transparent",
+      features: ["Hill Views", "Luxury Comfort", "Curated Experiences"],
     },
     {
       id: "serene",
       location: "NOIDA",
       title: "NIVAASA SERENE",
+      subtitle: "Modern Apartments",
       description:
-        "Nivaasa Serene is a modern apartment community in Noida, designed for those who value calm, comfort, and thoughtful living. With well-planned homes, landscaped open spaces, and a focus on natural light and ventilation, Serene offers a balanced lifestyle away from the city's noise, yet close to everything you need. It's a place where everyday living feels peaceful, easy, and elevated.",
+        "Nivaasa Serene is a modern apartment community in Noida, designed for those who value calm, comfort, and thoughtful living. With well-planned homes, landscaped open spaces, and natural ventilation.",
       image: "/explore-3.png",
-      bgPattern: "geometric-gold",
+      accent: "#fdc700",
+      gradient: "from-yellow-900/20 via-yellow-800/10 to-transparent",
+      features: [
+        "Landscaped Spaces",
+        "Natural Ventilation",
+        "Thoughtful Design",
+      ],
     },
   ];
 
-  return (
-    <div className="min-h-screen bg-black">
-      {properties.map((property, index) => (
-        <section
-          key={property.id}
-          className="relative min-h-screen flex items-center bg-black overflow-hidden"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
-              url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23333' strokeWidth='1' opacity='0.3'%3E%3Cpath d='M10 10 L90 10 L90 90 L10 90 Z'/%3E%3Cpath d='M20 20 L80 20 L80 80 L20 80 Z'/%3E%3Cpath d='M30 30 L70 30 L70 70 L30 70 Z'/%3E%3Cpath d='M10 10 L90 90'/%3E%3Cpath d='M90 10 L10 90'/%3E%3C/g%3E%3C/svg%3E")
-            `,
-            backgroundSize: "200px 200px",
-            backgroundRepeat: "repeat",
-          }}
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoaded(true), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Advanced text animation variants
+  const elasticPopVariants = {
+    hidden: {
+      opacity: 0,
+      scale: 0,
+      y: 100,
+      rotateX: -90,
+      filter: "blur(10px)",
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      rotateX: 0,
+      filter: "blur(0px)",
+      transition: {
+        type: "spring",
+        damping: 12,
+        stiffness: 200,
+        duration: 1.2,
+      },
+    },
+  };
+
+  const bouncePopVariants = {
+    hidden: {
+      opacity: 0,
+      scale: 0.3,
+      y: 50,
+      rotateZ: -180,
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      rotateZ: 0,
+      transition: {
+        type: "spring",
+        damping: 8,
+        stiffness: 300,
+        duration: 1.5,
+      },
+    },
+  };
+
+  const fadeSlideVariants = {
+    hidden: {
+      opacity: 0,
+      x: -100,
+      scale: 0.8,
+      filter: "blur(8px)",
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      scale: 1,
+      filter: "blur(0px)",
+      transition: {
+        duration: 1.2,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      },
+    },
+  };
+
+  const glowFadeVariants = {
+    hidden: {
+      opacity: 0,
+      scale: 0.5,
+      filter: "blur(20px) brightness(0.3)",
+      textShadow: "0 0 0px #fdc700",
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      filter: "blur(0px) brightness(1)",
+      textShadow: "0 0 30px #fdc700, 0 0 60px #fdc700, 0 0 90px #fdc700",
+      transition: {
+        duration: 2,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const typewriterAdvancedVariants = {
+    hidden: {
+      width: 0,
+      opacity: 0,
+    },
+    visible: {
+      width: "100%",
+      opacity: 1,
+      transition: {
+        width: {
+          duration: 2.5,
+          ease: "easeInOut",
+        },
+        opacity: {
+          duration: 0.5,
+          delay: 0.2,
+        },
+      },
+    },
+  };
+
+  const letterPopVariants = {
+    hidden: {
+      opacity: 0,
+      y: 80,
+      rotateX: -90,
+      scale: 0.3,
+      filter: "blur(5px)",
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      scale: 1,
+      filter: "blur(0px)",
+      transition: {
+        type: "spring",
+        damping: 15,
+        stiffness: 400,
+        duration: 1,
+      },
+    },
+  };
+
+  const wordFadeVariants = {
+    hidden: {
+      opacity: 0,
+      y: 30,
+      scale: 0.9,
+      filter: "blur(3px)",
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      filter: "blur(0px)",
+      transition: {
+        duration: 0.8,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      },
+    },
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const wordContainerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const AdvancedAnimatedText = ({
+    text,
+    className,
+    delay = 0,
+    variant = "elasticPop",
+    style = {},
+  }) => {
+    const letters = text.split("");
+
+    const getVariant = () => {
+      switch (variant) {
+        case "elasticPop":
+          return elasticPopVariants;
+        case "bouncePop":
+          return bouncePopVariants;
+        case "fadeSlide":
+          return fadeSlideVariants;
+        case "glowFade":
+          return glowFadeVariants;
+        default:
+          return elasticPopVariants;
+      }
+    };
+
+    if (variant === "typewriterAdvanced") {
+      return (
+        <div className="relative overflow-hidden">
+          <motion.div
+            className={`${className} relative`}
+            variants={typewriterAdvancedVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            style={{
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              ...style,
+            }}
+          >
+            {text}
+            <motion.span
+              className="absolute right-0 top-0 w-1 h-full bg-[#fdc700]"
+              animate={{
+                opacity: [1, 0, 1],
+                scaleY: [1, 0.8, 1],
+              }}
+              transition={{
+                duration: 1,
+                repeat: 4,
+                delay: delay,
+              }}
+            />
+          </motion.div>
+        </div>
+      );
+    }
+
+    if (variant === "letterPop") {
+      return (
+        <motion.div
+          className={className}
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          style={{ display: "inline-block", ...style }}
         >
-          <div className="container mx-auto px-8 py-16">
-            <div className="grid grid-cols-12 gap-8 items-center min-h-[80vh]">
-              {/* Left Image Section */}
-              <div className="col-span-12 lg:col-span-5">
-                <div
-                  className={`relative transform transition-all duration-1000 ${
-                    isLoaded
-                      ? "translate-x-0 opacity-100"
-                      : "-translate-x-10 opacity-0"
-                  }`}
-                  style={{ transitionDelay: `${index * 200}ms` }}
+          {letters.map((letter, index) => (
+            <motion.span
+              key={index}
+              variants={letterPopVariants}
+              style={{
+                display: "inline-block",
+                marginRight: letter === " " ? "0.25em" : "0",
+              }}
+              transition={{
+                delay: delay + index * 0.05,
+                type: "spring",
+                damping: 12 + Math.random() * 8,
+                stiffness: 300 + Math.random() * 200,
+              }}
+              whileHover={{
+                scale: 1.2,
+                color: "#fdc700",
+                textShadow: "0 0 20px #fdc700",
+                transition: { duration: 0.2 },
+              }}
+            >
+              {letter === " " ? "\u00A0" : letter}
+            </motion.span>
+          ))}
+        </motion.div>
+      );
+    }
+
+    return (
+      <motion.div
+        className={className}
+        variants={getVariant()}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        style={style}
+        transition={{ delay }}
+      >
+        {text}
+      </motion.div>
+    );
+  };
+
+  const AdvancedAnimatedParagraph = ({
+    text,
+    className,
+    delay = 0,
+    variant = "wordFade",
+  }) => {
+    const words = text.split(" ");
+
+    return (
+      <motion.div
+        className={className}
+        variants={wordContainerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
+        {words.map((word, index) => (
+          <motion.span
+            key={index}
+            className="inline-block mr-2"
+            variants={wordFadeVariants}
+            transition={{
+              delay: delay + index * 0.06,
+              duration: 0.8 + Math.random() * 0.4,
+              ease: [0.25, 0.46, 0.45, 0.94],
+            }}
+            whileHover={{
+              scale: 1.05,
+              color: "#fdc700",
+              transition: { duration: 0.2 },
+            }}
+          >
+            {word}
+          </motion.span>
+        ))}
+      </motion.div>
+    );
+  };
+
+  const sectionVariants = {
+    hidden: {
+      opacity: 0,
+      y: 100,
+      scale: 0.95,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 1.2,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      },
+    },
+  };
+
+  const imageVariants = {
+    hidden: {
+      scale: 1.2,
+      opacity: 0,
+      rotateY: -15,
+      filter: "blur(10px)",
+    },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      rotateY: 0,
+      filter: "blur(0px)",
+      transition: {
+        duration: 1.5,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      },
+    },
+    hover: {
+      scale: 1.05,
+      rotateY: 5,
+      filter: "brightness(1.1)",
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const FloatingElements = () => (
+    <div className="fixed inset-0 pointer-events-none overflow-hidden">
+      {[...Array(15)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-1 h-1 bg-[#fdc700]/40 rounded-full"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+          animate={{
+            y: [0, -40, 0],
+            opacity: [0.4, 1, 0.4],
+            scale: [1, 2, 1],
+          }}
+          transition={{
+            duration: 4 + Math.random() * 3,
+            repeat: Number.POSITIVE_INFINITY,
+            delay: Math.random() * 3,
+          }}
+        />
+      ))}
+    </div>
+  );
+
+  return (
+    <div className="relative bg-black">
+      <FloatingElements />
+
+      {/* Hero Section */}
+      <motion.section
+        className="min-h-screen flex items-center justify-center bg-black relative overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2 }}
+      >
+        <motion.div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black" />
+
+        <motion.div
+          className="absolute inset-0 opacity-15"
+          style={{
+            backgroundImage: `radial-gradient(circle at 60% 40%, #fdc700 0%, transparent 50%)`,
+          }}
+        />
+
+        <motion.div
+          className="text-center z-10 px-8"
+          variants={containerVariants}
+          initial="hidden"
+          animate={isLoaded ? "visible" : "hidden"}
+        >
+          <motion.div className="mb-16">
+            <AdvancedAnimatedText
+              text="NIVAASA"
+              className="text-6xl md:text-8xl lg:text-9xl font-thin mb-8 tracking-wider"
+              delay={0.5}
+              variant="glowFade"
+              style={{
+                color: "#fdc700",
+                textShadow:
+                  "0 0 40px #fdc700, 0 0 80px #fdc700, 0 0 120px #fdc700",
+              }}
+            />
+
+            <AdvancedAnimatedText
+              text="LUXURY LIVING REDEFINED"
+              className="text-xl md:text-2xl font-light tracking-widest text-[#fdc700]/90"
+              delay={2}
+              variant="typewriterAdvanced"
+            />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5, y: 50 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{
+              duration: 1.2,
+              delay: 3.5,
+              type: "spring",
+              damping: 10,
+              stiffness: 200,
+            }}
+          >
+            <motion.button
+              className="bg-gradient-to-r from-[#fdc700] to-[#fdc700]/80 text-black px-12 py-4 text-lg font-bold tracking-wider uppercase relative overflow-hidden group rounded-lg"
+              whileHover={{
+                scale: 1.08,
+                boxShadow: "0 25px 50px rgba(253, 199, 0, 0.5)",
+                y: -5,
+              }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                document.getElementById("section-0")?.scrollIntoView({
+                  behavior: "smooth",
+                });
+              }}
+            >
+              <span className="relative z-10">EXPLORE COLLECTION</span>
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-[#fdc700]/80 to-[#fdc700]"
+                initial={{ x: "-100%" }}
+                whileHover={{ x: "0%" }}
+                transition={{ duration: 0.4 }}
+              />
+            </motion.button>
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          animate={{ y: [0, 15, 0] }}
+          transition={{ duration: 2.5, repeat: Number.POSITIVE_INFINITY }}
+        >
+          <div className="w-6 h-10 border-2 border-[#fdc700]/60 rounded-full flex justify-center">
+            <motion.div
+              className="w-1 h-3 bg-[#fdc700] rounded-full mt-2"
+              animate={{ y: [0, 15, 0] }}
+              transition={{ duration: 2.5, repeat: Number.POSITIVE_INFINITY }}
+            />
+          </div>
+        </motion.div>
+      </motion.section>
+
+      {/* Property Sections */}
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {properties.map((property, index) => (
+          <motion.section
+            key={property.id}
+            id={`section-${index}`}
+            className="min-h-screen flex items-center relative overflow-hidden bg-black"
+            variants={sectionVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            <motion.div
+              className={`absolute inset-0 bg-gradient-to-br ${property.gradient}`}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 2 }}
+              viewport={{ once: true }}
+            />
+
+            <div className="container mx-auto px-8 py-16 relative z-10">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-[80vh]">
+                {/* Image Section */}
+                <motion.div
+                  className={`${
+                    index % 2 === 0 ? "order-1" : "order-2"
+                  } relative`}
+                  variants={imageVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  whileHover="hover"
+                  viewport={{ once: true }}
                 >
-                  <div className="aspect-square relative">
-                    <img
-                      src={property.image || "/placeholder.svg"}
-                      alt={`${property.title} luxury development`}
-                      className="w-full h-full object-cover rounded-lg"
+                  <motion.div className="relative group">
+                    <motion.div
+                      className="absolute -inset-4 bg-gradient-to-r from-transparent via-[#fdc700]/20 to-transparent rounded-2xl"
+                      initial={{ opacity: 0 }}
+                      whileHover={{ opacity: 1 }}
+                      transition={{ duration: 0.4 }}
                     />
-                  </div>
-                </div>
-              </div>
 
-              {/* Right Content Section */}
-              <div className="col-span-12 lg:col-span-7 relative">
-                {/* Location Badge */}
-                <div className="absolute top-0 right-0">
-                  <div className="bg-white text-black px-4 py-2 text-sm font-medium tracking-wider">
-                    {property.location}
-                  </div>
-                </div>
+                    <motion.img
+                      src={property.image}
+                      alt={property.title}
+                      className="w-full h-[600px] object-cover rounded-2xl shadow-2xl border border-[#fdc700]/30"
+                      whileHover={{
+                        boxShadow: "0 30px 60px rgba(253, 199, 0, 0.4)",
+                        borderColor: "#fdc700",
+                      }}
+                      transition={{ duration: 0.4 }}
+                    />
 
-                {/* Main Content */}
-                <div
-                  className={`pt-16 text-center transform transition-all duration-1000 ${
-                    isLoaded
-                      ? "translate-x-0 opacity-100"
-                      : "translate-x-10 opacity-0"
-                  }`}
-                  style={{ transitionDelay: `${index * 200 + 300}ms` }}
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent rounded-2xl"
+                      initial={{ opacity: 0 }}
+                      whileHover={{ opacity: 1 }}
+                      transition={{ duration: 0.4 }}
+                    />
+                  </motion.div>
+                </motion.div>
+
+                {/* Content Section */}
+                <motion.div
+                  className={`${
+                    index % 2 === 0 ? "order-2" : "order-1"
+                  } space-y-10`}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
                 >
-                  {/* Project Title */}
-                  <h1 className="text-5xl lg:text-6xl xl:text-7xl font-light text-yellow-400 mb-8 leading-tight">
-                    {property.title}
-                  </h1>
+                  <motion.div
+                    className="inline-block"
+                    initial={{ opacity: 0, x: -30, scale: 0.7 }}
+                    whileInView={{ opacity: 1, x: 0, scale: 1 }}
+                    transition={{
+                      duration: 1,
+                      delay: 0.2,
+                      type: "spring",
+                      damping: 15,
+                      stiffness: 300,
+                    }}
+                    viewport={{ once: true }}
+                  >
+                    <motion.span
+                      className="px-6 py-3 text-sm font-bold tracking-widest uppercase border-2 rounded-full bg-black/60 backdrop-blur-sm text-[#fdc700] border-[#fdc700]"
+                      style={{
+                        textShadow: "0 0 15px #fdc700",
+                      }}
+                      whileHover={{
+                        scale: 1.1,
+                        boxShadow: "0 0 30px rgba(253, 199, 0, 0.6)",
+                        backgroundColor: "rgba(253, 199, 0, 0.1)",
+                      }}
+                    >
+                      {property.location}
+                    </motion.span>
+                  </motion.div>
 
-                  {/* Description */}
-                  <div className=" mb-12">
-                    <p className="text-white text-base lg:text-lg leading-relaxed font-light">
-                      {property.description}
-                    </p>
-                  </div>
+                  <motion.div>
+                    <AdvancedAnimatedText
+                      text={property.title}
+                      className="text-5xl lg:text-7xl font-thin mb-6 leading-tight"
+                      delay={0.5}
+                      variant="letterPop"
+                      style={{
+                        color: "#fdc700",
+                        textShadow: "0 0 40px rgba(253, 199, 0, 0.8)",
+                      }}
+                    />
 
-                  {/* Discover More Button */}
-                  <button className="bg-yellow-400 text-black px-8 py-4 font-medium tracking-wider uppercase hover:bg-yellow-300 transition-colors duration-300">
-                    DISCOVER MORE
-                  </button>
-                </div>
+                    <AdvancedAnimatedText
+                      text={property.subtitle}
+                      className="text-xl font-light mb-8 text-[#fdc700]/80"
+                      delay={1.5}
+                      variant="fadeSlide"
+                    />
+                  </motion.div>
+
+                  <AdvancedAnimatedParagraph
+                    text={property.description}
+                    className="text-lg text-gray-200 leading-relaxed font-light max-w-2xl"
+                    delay={2}
+                  />
+
+                  <motion.div
+                    className="flex flex-wrap gap-4 mb-10"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1, delay: 2.5 }}
+                    viewport={{ once: true }}
+                  >
+                    {property.features.map((feature, featureIndex) => (
+                      <motion.span
+                        key={feature}
+                        className="px-5 py-3 bg-gradient-to-r from-[#fdc700]/20 to-[#fdc700]/10 text-[#fdc700] text-sm rounded-full backdrop-blur-sm border border-[#fdc700]/40"
+                        initial={{
+                          opacity: 0,
+                          scale: 0.5,
+                          y: 30,
+                          rotateZ: -45,
+                        }}
+                        whileInView={{
+                          opacity: 1,
+                          scale: 1,
+                          y: 0,
+                          rotateZ: 0,
+                        }}
+                        transition={{
+                          duration: 0.8,
+                          delay: 2.7 + featureIndex * 0.15,
+                          type: "spring",
+                          damping: 12,
+                          stiffness: 200,
+                        }}
+                        viewport={{ once: true }}
+                        whileHover={{
+                          scale: 1.1,
+                          backgroundColor: "rgba(253, 199, 0, 0.3)",
+                          boxShadow: "0 0 20px rgba(253, 199, 0, 0.4)",
+                          y: -3,
+                        }}
+                      >
+                        {feature}
+                      </motion.span>
+                    ))}
+                  </motion.div>
+
+                  <motion.div
+                    className="flex flex-col sm:flex-row gap-6"
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 1.2,
+                      delay: 3.2,
+                      type: "spring",
+                      damping: 15,
+                      stiffness: 200,
+                    }}
+                    viewport={{ once: true }}
+                  >
+                    <motion.button
+                      className="px-10 py-4 text-black font-bold tracking-wider uppercase transition-all duration-300 relative overflow-hidden group rounded-lg bg-[#fdc700]"
+                      whileHover={{
+                        scale: 1.08,
+                        boxShadow: "0 25px 50px rgba(253, 199, 0, 0.5)",
+                        y: -5,
+                      }}
+                      whileTap={{ scale: 0.92 }}
+                    >
+                      <span className="relative z-10">DISCOVER MORE</span>
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-[#fdc700]/80 to-[#fdc700]"
+                        initial={{ x: "-100%" }}
+                        whileHover={{ x: "0%" }}
+                        transition={{ duration: 0.4 }}
+                      />
+                    </motion.button>
+
+                    <motion.button
+                      className="px-10 py-4 border-2 text-[#fdc700] font-bold tracking-wider uppercase hover:bg-[#fdc700] hover:text-black transition-all duration-300 rounded-lg backdrop-blur-sm border-[#fdc700]"
+                      whileHover={{
+                        scale: 1.08,
+                        boxShadow: "0 0 30px rgba(253, 199, 0, 0.4)",
+                        y: -5,
+                      }}
+                      whileTap={{ scale: 0.92 }}
+                    >
+                      VIEW GALLERY
+                    </motion.button>
+                  </motion.div>
+                </motion.div>
               </div>
             </div>
-          </div>
 
-          {/* Subtle separator line between sections */}
-          {index < properties.length - 1 && (
-            <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
-          )}
-        </section>
-      ))}
+            {/* Decorative Elements */}
+            <motion.div
+              className="absolute top-1/4 right-10 w-32 h-32 border border-[#fdc700]/40 rounded-full"
+              animate={{ rotate: 360 }}
+              transition={{
+                duration: 25,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "linear",
+              }}
+            />
+            <motion.div
+              className="absolute bottom-1/4 left-10 w-24 h-24 border border-[#fdc700]/30 rounded-full"
+              animate={{ rotate: -360 }}
+              transition={{
+                duration: 20,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "linear",
+              }}
+            />
+          </motion.section>
+        ))}
+      </motion.div>
+
+      {/* Footer Section */}
+      <motion.section
+        className="min-h-screen flex items-center justify-center bg-gradient-to-t from-black via-gray-900 to-black relative overflow-hidden"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 2 }}
+        viewport={{ once: true }}
+      >
+        <motion.div
+          className="text-center z-10 px-8"
+          initial={{ opacity: 0, y: 60 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.5 }}
+          viewport={{ once: true }}
+        >
+          <AdvancedAnimatedText
+            text="BEGIN YOUR JOURNEY"
+            className="text-6xl md:text-8xl font-thin mb-12 tracking-wider"
+            delay={0.3}
+            variant="glowFade"
+            style={{
+              color: "#fdc700",
+              textShadow: "0 0 50px #fdc700, 0 0 100px #fdc700",
+            }}
+          />
+
+          <AdvancedAnimatedParagraph
+            text="Experience luxury living like never before. Contact our team to schedule your private viewing."
+            className="text-xl text-[#fdc700]/80 font-light mb-16 max-w-2xl mx-auto"
+            delay={1.5}
+          />
+
+          <motion.button
+            className="bg-gradient-to-r from-[#fdc700] to-[#fdc700]/80 text-black px-20 py-6 text-xl font-bold tracking-wider uppercase relative overflow-hidden group rounded-lg"
+            initial={{ opacity: 0, scale: 0.5, y: 50 }}
+            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{
+              duration: 1.5,
+              delay: 2.5,
+              type: "spring",
+              damping: 10,
+              stiffness: 200,
+            }}
+            viewport={{ once: true }}
+            whileHover={{
+              scale: 1.1,
+              boxShadow: "0 30px 60px rgba(253, 199, 0, 0.6)",
+              y: -8,
+            }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <span className="relative z-10">CONTACT US TODAY</span>
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-[#fdc700]/80 to-[#fdc700]"
+              initial={{ x: "-100%" }}
+              whileHover={{ x: "0%" }}
+              transition={{ duration: 0.4 }}
+            />
+          </motion.button>
+        </motion.div>
+      </motion.section>
     </div>
   );
 };

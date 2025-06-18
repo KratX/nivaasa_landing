@@ -1,109 +1,255 @@
 "use client";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
-import { useState, useEffect, useRef } from "react";
-
-/**
- * Luxury Real Estate Footer Component
- * Features newsletter subscription, contact information, and company branding
- * with sophisticated dark theme and animated geometric background
- */
 const Footer = () => {
-  // State management for form and animations
   const [email, setEmail] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [hoveredSocial, setHoveredSocial] = useState(null);
-  const canvasRef = useRef(null);
-  const animationFrameRef = useRef(null);
 
-  // Initialize component
   useEffect(() => {
-    setIsLoaded(true);
-    initializeGeometricBackground();
-
-    return () => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-    };
+    const timer = setTimeout(() => setIsLoaded(true), 500);
+    return () => clearTimeout(timer);
   }, []);
 
-  /**
-   * Initialize animated geometric background patterns
-   */
-  const initializeGeometricBackground = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    resizeCanvas();
-
-    const drawArchitecturalLines = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
-      ctx.lineWidth = 1;
-
-      const time = Date.now() * 0.0002;
-
-      // Draw architectural wireframe patterns
-      for (let i = 0; i < canvas.width; i += 120) {
-        for (let j = 0; j < canvas.height; j += 120) {
-          const offset = Math.sin(time + i * 0.01 + j * 0.01) * 15;
-
-          // Draw building-like structures
-          ctx.beginPath();
-          ctx.rect(i + offset, j, 80, 100);
-          ctx.stroke();
-
-          // Draw connecting lines
-          ctx.beginPath();
-          ctx.moveTo(i + 40, j);
-          ctx.lineTo(i + 40 + offset, j - 50);
-          ctx.lineTo(i + 120, j - 25);
-          ctx.stroke();
-
-          // Draw diagonal supports
-          ctx.beginPath();
-          ctx.moveTo(i, j + 100);
-          ctx.lineTo(i + 80 + offset, j);
-          ctx.stroke();
-
-          // Draw grid lines
-          if (i < canvas.width - 120) {
-            ctx.beginPath();
-            ctx.moveTo(i + 80, j + 50);
-            ctx.lineTo(i + 120, j + 50);
-            ctx.stroke();
-          }
-        }
-      }
-
-      animationFrameRef.current = requestAnimationFrame(drawArchitecturalLines);
-    };
-
-    drawArchitecturalLines();
-
-    // Handle window resize
-    const handleResize = () => {
-      resizeCanvas();
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+  // Advanced animation variants
+  const explosiveTextVariants = {
+    hidden: {
+      opacity: 0,
+      scale: 0,
+      y: 80,
+      rotateX: -90,
+      rotateZ: -45,
+      filter: "blur(15px)",
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      rotateX: 0,
+      rotateZ: 0,
+      filter: "blur(0px)",
+      transition: {
+        type: "spring",
+        damping: 10,
+        stiffness: 200,
+        duration: 1.5,
+      },
+    },
   };
 
-  /**
-   * Handle email subscription
-   */
+  const letterPopVariants = {
+    hidden: {
+      opacity: 0,
+      y: 100,
+      rotateX: -90,
+      scale: 0.3,
+      filter: "blur(8px)",
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      scale: 1,
+      filter: "blur(0px)",
+      transition: {
+        type: "spring",
+        damping: 12,
+        stiffness: 400,
+        duration: 1,
+      },
+    },
+  };
+
+  const glowBurstVariants = {
+    hidden: {
+      opacity: 0,
+      scale: 0.2,
+      filter: "blur(25px) brightness(0.3)",
+      textShadow: "0 0 0px #fdc700",
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      filter: "blur(0px) brightness(1)",
+      textShadow: "0 0 50px #fdc700, 0 0 100px #fdc700, 0 0 150px #fdc700",
+      transition: {
+        duration: 2.5,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const cascadeVariants = {
+    hidden: {
+      opacity: 0,
+      y: 40,
+      scale: 0.9,
+      filter: "blur(4px)",
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      filter: "blur(0px)",
+      transition: {
+        duration: 0.8,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      },
+    },
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const wordContainerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const ExplosiveAnimatedText = ({
+    text,
+    className,
+    delay = 0,
+    variant = "explosiveText",
+    style = {},
+  }) => {
+    const letters = text.split("");
+
+    const getVariant = () => {
+      switch (variant) {
+        case "explosiveText":
+          return explosiveTextVariants;
+        case "letterPop":
+          return letterPopVariants;
+        case "glowBurst":
+          return glowBurstVariants;
+        case "cascade":
+          return cascadeVariants;
+        default:
+          return explosiveTextVariants;
+      }
+    };
+
+    if (variant === "letterPop") {
+      return (
+        <motion.div
+          className={className}
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          style={{ display: "inline-block", ...style }}
+        >
+          {letters.map((letter, index) => (
+            <motion.span
+              key={index}
+              variants={letterPopVariants}
+              style={{
+                display: "inline-block",
+                marginRight: letter === " " ? "0.25em" : "0",
+              }}
+              transition={{
+                delay: delay + index * 0.03,
+                type: "spring",
+                damping: 10 + Math.random() * 8,
+                stiffness: 350 + Math.random() * 200,
+              }}
+              whileHover={{
+                scale: 1.2,
+                color: "#fdc700",
+                textShadow: "0 0 20px #fdc700",
+                y: -3,
+                transition: { duration: 0.2 },
+              }}
+            >
+              {letter === " " ? "\u00A0" : letter}
+            </motion.span>
+          ))}
+        </motion.div>
+      );
+    }
+
+    return (
+      <motion.div
+        className={className}
+        variants={getVariant()}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        style={style}
+        transition={{ delay }}
+      >
+        {text}
+      </motion.div>
+    );
+  };
+
+  const ExplosiveAnimatedParagraph = ({ text, className, delay = 0 }) => {
+    const words = text.split(" ");
+
+    return (
+      <motion.div
+        className={className}
+        variants={wordContainerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
+        {words.map((word, index) => (
+          <motion.span
+            key={index}
+            className="inline-block mr-2"
+            initial={{
+              opacity: 0,
+              y: 30,
+              scale: 0.8,
+              rotateX: -30,
+              filter: "blur(2px)",
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              rotateX: 0,
+              filter: "blur(0px)",
+            }}
+            transition={{
+              duration: 0.6 + Math.random() * 0.3,
+              delay: delay + index * 0.04,
+              type: "spring",
+              damping: 15,
+              stiffness: 200,
+            }}
+            viewport={{ once: true }}
+            whileHover={{
+              scale: 1.05,
+              color: "#fdc700",
+              y: -1,
+              transition: { duration: 0.2 },
+            }}
+          >
+            {word}
+          </motion.span>
+        ))}
+      </motion.div>
+    );
+  };
+
   const handleSubscribe = (e) => {
     e.preventDefault();
     if (email.trim() && email.includes("@")) {
@@ -115,9 +261,6 @@ const Footer = () => {
     }
   };
 
-  /**
-   * Social media links configuration
-   */
   const socialLinks = [
     {
       name: "Facebook",
@@ -148,127 +291,255 @@ const Footer = () => {
     },
   ];
 
-  /**
-   * Navigation links
-   */
   const navLinks = [
     { name: "Privacy Policy", url: "#" },
     { name: "Experience Center", url: "#" },
     { name: "Media&News", url: "#" },
   ];
 
+  const FloatingParticles = () => (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {[...Array(25)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-1 h-1 bg-[#fdc700]/20 rounded-full"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+          animate={{
+            y: [0, -60, 0],
+            opacity: [0.2, 0.8, 0.2],
+            scale: [1, 2.5, 1],
+          }}
+          transition={{
+            duration: 5 + Math.random() * 4,
+            repeat: Number.POSITIVE_INFINITY,
+            delay: Math.random() * 4,
+          }}
+        />
+      ))}
+    </div>
+  );
+
   return (
     <footer className="relative bg-black text-white overflow-hidden">
-      {/* Animated Canvas Background */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 pointer-events-none opacity-40"
-        style={{ zIndex: 1 }}
-      />
+      <FloatingParticles />
+
+      {/* Static Background Pattern */}
+      <div className="absolute inset-0 pointer-events-none opacity-8">
+        <div
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23fdc700' strokeWidth='0.5'%3E%3Crect x='10' y='10' width='80' height='100'/%3E%3Cpath d='M50 10 L50 -40 L120 -15'/%3E%3Cpath d='M10 110 L90 10'/%3E%3Cpath d='M90 60 L120 60'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: "120px 120px",
+            backgroundRepeat: "repeat",
+          }}
+        />
+      </div>
 
       {/* Main Footer Content */}
       <div className="relative z-10">
         {/* Top Border Line */}
-        <div className="w-full h-px bg-white"></div>
+        <motion.div
+          className="w-full h-px bg-[#fdc700]"
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          transition={{ duration: 2, delay: 0.5 }}
+          viewport={{ once: true }}
+          style={{
+            boxShadow: "0 0 10px #fdc700",
+          }}
+        />
 
         {/* Main Footer Section */}
         <div className="container mx-auto px-6 py-16">
           {/* Header */}
-          <div
-            className={`mb-16 transform transition-all duration-1000 ${
-              isLoaded
-                ? "translate-y-0 opacity-100"
-                : "translate-y-10 opacity-0"
-            }`}
+          <motion.div
+            className="mb-20"
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, delay: 0.3 }}
+            viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-4">
-              Stay Updated with our Projects
-            </h2>
-            <div className="w-24 h-1 bg-yellow-400"></div>
-          </div>
+            <ExplosiveAnimatedText
+              text="Stay Updated with our Projects"
+              className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-6"
+              delay={0.5}
+              variant="letterPop"
+            />
+
+            <motion.div
+              className="w-24 h-1 bg-[#fdc700]"
+              initial={{ width: 0, opacity: 0 }}
+              whileInView={{ width: 96, opacity: 1 }}
+              transition={{ duration: 1.5, delay: 1.5 }}
+              viewport={{ once: true }}
+              style={{
+                boxShadow: "0 0 15px #fdc700",
+              }}
+            />
+          </motion.div>
 
           {/* Main Content Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
             {/* Left Section - Newsletter */}
-            <div
-              className={`transform transition-all duration-1000 delay-300 ${
-                isLoaded
-                  ? "translate-x-0 opacity-100"
-                  : "-translate-x-10 opacity-0"
-              }`}
+            <motion.div
+              initial={{ opacity: 0, x: -60, scale: 0.9 }}
+              whileInView={{ opacity: 1, x: 0, scale: 1 }}
+              transition={{
+                duration: 1.2,
+                delay: 0.8,
+                type: "spring",
+                damping: 15,
+                stiffness: 200,
+              }}
+              viewport={{ once: true }}
             >
-              <h3 className="text-4xl md:text-5xl lg:text-6xl font-light text-yellow-400 mb-8">
-                Let's Talk
-              </h3>
+              <ExplosiveAnimatedText
+                text="Let's Talk"
+                className="text-4xl md:text-5xl lg:text-6xl font-light mb-12"
+                delay={1}
+                variant="glowBurst"
+                style={{
+                  color: "#fdc700",
+                  textShadow: "0 0 60px #fdc700, 0 0 120px #fdc700",
+                }}
+              />
 
               {/* Email Subscription Form */}
-              <form onSubmit={handleSubscribe} className="mb-6">
-                <div className="flex flex-col sm:flex-row gap-4">
+              <motion.form
+                onSubmit={handleSubscribe}
+                className="mb-8"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 1.5 }}
+                viewport={{ once: true }}
+              >
+                <div className="flex flex-col sm:flex-row gap-6">
                   <div className="flex-1">
-                    <input
+                    <motion.input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Enter Your Email Address"
-                      className="w-full bg-transparent border-b-2 border-white pb-3 text-white placeholder-gray-400 focus:border-yellow-400 focus:outline-none transition-colors duration-300"
+                      className="w-full bg-transparent border-b-2 border-white pb-4 text-white placeholder-gray-400 focus:border-[#fdc700] focus:outline-none transition-all duration-300 text-lg"
                       required
+                      whileFocus={{
+                        borderColor: "#fdc700",
+                        boxShadow: "0 2px 10px rgba(253, 199, 0, 0.3)",
+                      }}
                     />
                   </div>
-                  <button
+                  <motion.button
                     type="submit"
-                    className="px-8 py-3 bg-transparent border border-white text-white hover:bg-yellow-400 hover:text-black hover:border-yellow-400 transition-all duration-300 font-medium"
+                    className="px-10 py-4 bg-transparent border-2 border-white text-white hover:bg-[#fdc700] hover:text-black hover:border-[#fdc700] transition-all duration-300 font-bold tracking-wide rounded-lg"
                     disabled={isSubscribed}
+                    whileHover={{
+                      scale: 1.05,
+                      boxShadow: "0 0 25px rgba(253, 199, 0, 0.4)",
+                      y: -2,
+                    }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     {isSubscribed ? "Subscribed!" : "Subscribe"}
-                  </button>
+                  </motion.button>
                 </div>
-              </form>
+              </motion.form>
 
-              <p className="text-gray-400 text-sm">
-                Don't worry, we won't spam your inbox
-              </p>
-            </div>
+              <ExplosiveAnimatedParagraph
+                text="Don't worry, we won't spam your inbox"
+                className="text-gray-400 text-sm"
+                delay={2}
+              />
+            </motion.div>
 
             {/* Right Section - Contact Info */}
-            <div
-              className={`transform transition-all duration-1000 delay-500 ${
-                isLoaded
-                  ? "translate-x-0 opacity-100"
-                  : "translate-x-10 opacity-0"
-              }`}
+            <motion.div
+              initial={{ opacity: 0, x: 60, scale: 0.9 }}
+              whileInView={{ opacity: 1, x: 0, scale: 1 }}
+              transition={{
+                duration: 1.2,
+                delay: 1,
+                type: "spring",
+                damping: 15,
+                stiffness: 200,
+              }}
+              viewport={{ once: true }}
             >
               {/* Address */}
-              <div className="mb-8">
-                <p className="text-white text-lg leading-relaxed">
-                  Elan Tower, Golf course Road,
-                  <br />
-                  sector 42, Gurgaon, 122002
-                </p>
-              </div>
+              <motion.div
+                className="mb-12"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1.3 }}
+                viewport={{ once: true }}
+              >
+                <ExplosiveAnimatedParagraph
+                  text="Elan Tower, Golf course Road, sector 42, Gurgaon, 122002"
+                  className="text-white text-lg leading-relaxed"
+                  delay={1.5}
+                />
+              </motion.div>
 
               {/* Contact Details */}
-              <div className="space-y-6">
-                <div>
-                  <h4 className="text-yellow-400 font-medium mb-2">EMAIL US</h4>
-                  <a
+              <div className="space-y-8">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 1.8 }}
+                  viewport={{ once: true }}
+                >
+                  <ExplosiveAnimatedText
+                    text="EMAIL US"
+                    className="font-bold mb-3 tracking-wide"
+                    delay={2}
+                    variant="cascade"
+                    style={{
+                      color: "#fdc700",
+                      textShadow: "0 0 15px rgba(253, 199, 0, 0.5)",
+                    }}
+                  />
+                  <motion.a
                     href="mailto:nivaasasupport@gmail.com"
-                    className="text-white hover:text-yellow-400 transition-colors duration-300"
+                    className="text-white hover:text-[#fdc700] transition-colors duration-300 text-lg"
+                    whileHover={{
+                      scale: 1.05,
+                      textShadow: "0 0 10px #fdc700",
+                    }}
                   >
                     nivaasasupport@gmail.com
-                  </a>
-                </div>
+                  </motion.a>
+                </motion.div>
 
-                <div>
-                  <h4 className="text-yellow-400 font-medium mb-2">CALL US</h4>
-                  <a
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 2.2 }}
+                  viewport={{ once: true }}
+                >
+                  <ExplosiveAnimatedText
+                    text="CALL US"
+                    className="font-bold mb-3 tracking-wide"
+                    delay={2.4}
+                    variant="cascade"
+                    style={{
+                      color: "#fdc700",
+                      textShadow: "0 0 15px rgba(253, 199, 0, 0.5)",
+                    }}
+                  />
+                  <motion.a
                     href="tel:7045682162"
-                    className="text-white hover:text-yellow-400 transition-colors duration-300"
+                    className="text-white hover:text-[#fdc700] transition-colors duration-300 text-lg"
+                    whileHover={{
+                      scale: 1.05,
+                      textShadow: "0 0 10px #fdc700",
+                    }}
                   >
                     7045682162
-                  </a>
-                </div>
+                  </motion.a>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
 
@@ -276,64 +547,162 @@ const Footer = () => {
         <div className="border-t border-gray-800">
           <div className="container mx-auto px-6 py-8">
             {/* Navigation Links */}
-            <div className="flex flex-wrap justify-center lg:justify-start gap-8 mb-8">
+            <motion.div
+              className="flex flex-wrap justify-center lg:justify-start gap-8 mb-10"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.5 }}
+              viewport={{ once: true }}
+            >
               {navLinks.map((link, index) => (
-                <a
+                <motion.a
                   key={index}
                   href={link.url}
-                  className="text-white hover:text-yellow-400 transition-colors duration-300 font-medium"
+                  className="text-white hover:text-[#fdc700] transition-colors duration-300 font-medium text-lg"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.7 + index * 0.1 }}
+                  viewport={{ once: true }}
+                  whileHover={{
+                    scale: 1.05,
+                    textShadow: "0 0 10px #fdc700",
+                    y: -2,
+                  }}
                 >
                   {link.name}
-                </a>
+                </motion.a>
               ))}
-            </div>
+            </motion.div>
 
             {/* Bottom Row */}
             <div className="flex flex-col lg:flex-row justify-between items-center gap-8">
               {/* Copyright */}
-              <div className="text-gray-400 text-sm text-center lg:text-left">
-                <p>© 2024 Nivaasa. All rights reserved.</p>
-                <p>Designed with excellence for luxury real estate.</p>
-              </div>
+              <motion.div
+                className="text-gray-400 text-sm text-center lg:text-left"
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 1 }}
+                viewport={{ once: true }}
+              >
+                <ExplosiveAnimatedParagraph
+                  text="© 2024 Nivaasa. All rights reserved."
+                  className="mb-1"
+                  delay={1.2}
+                />
+                <ExplosiveAnimatedParagraph
+                  text="Designed with excellence for luxury real estate."
+                  className=""
+                  delay={1.5}
+                />
+              </motion.div>
 
               {/* Company Logo and Branding */}
-              <div className="flex flex-col items-center">
+              <motion.div
+                className="flex flex-col items-center"
+                initial={{ opacity: 0, y: 30, scale: 0.8 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{
+                  duration: 1,
+                  delay: 1.3,
+                  type: "spring",
+                  damping: 15,
+                  stiffness: 200,
+                }}
+                viewport={{ once: true }}
+              >
                 <div className="flex items-center mb-2">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center mr-3">
-                    <img src="logo.png" alt="" />
-                  </div>
+                  <motion.div
+                    className="w-12 h-12 rounded-full flex items-center justify-center mr-3"
+                    whileHover={{
+                      scale: 1.1,
+                      boxShadow: "0 0 20px rgba(253, 199, 0, 0.5)",
+                    }}
+                    style={{
+                      boxShadow: "0 0 15px rgba(253, 199, 0, 0.3)",
+                    }}
+                  >
+                    <img src="/logo.png" alt="Nivaasa Logo" />
+                  </motion.div>
                   <div>
-                    <h4 className="text-yellow-400 font-bold text-xl tracking-wider">
-                      NIVAASA
-                    </h4>
-                    <p className="text-gray-400 text-xs">
-                      Beyond Spaces. Building Legacies
-                    </p>
+                    <ExplosiveAnimatedText
+                      text="NIVAASA"
+                      className="font-bold text-xl tracking-wider"
+                      delay={1.8}
+                      variant="letterPop"
+                      style={{
+                        color: "#fdc700",
+                        textShadow: "0 0 20px rgba(253, 199, 0, 0.6)",
+                      }}
+                    />
+                    <ExplosiveAnimatedText
+                      text="Beyond Spaces. Building Legacies"
+                      className="text-gray-400 text-xs"
+                      delay={2.2}
+                      variant="cascade"
+                    />
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Social Media Icons */}
-              <div className="flex space-x-4">
+              <motion.div
+                className="flex space-x-4"
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 1.5 }}
+                viewport={{ once: true }}
+              >
                 {socialLinks.map((social, index) => (
-                  <a
+                  <motion.a
                     key={index}
                     href={social.url}
-                    className={`w-12 h-12 bg-white text-black rounded-full flex items-center justify-center hover:bg-yellow-400 transition-all duration-300 transform hover:scale-110 ${
-                      hoveredSocial === index ? "scale-110 bg-yellow-400" : ""
-                    }`}
-                    onMouseEnter={() => setHoveredSocial(index)}
-                    onMouseLeave={() => setHoveredSocial(null)}
+                    className="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center hover:bg-[#fdc700] transition-all duration-300"
                     title={social.name}
+                    initial={{ opacity: 0, scale: 0, rotate: -180 }}
+                    whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+                    transition={{
+                      duration: 0.8,
+                      delay: 1.7 + index * 0.1,
+                      type: "spring",
+                      damping: 15,
+                      stiffness: 200,
+                    }}
+                    viewport={{ once: true }}
+                    whileHover={{
+                      scale: 1.2,
+                      boxShadow: "0 0 20px rgba(253, 199, 0, 0.6)",
+                      y: -3,
+                    }}
+                    whileTap={{ scale: 0.9 }}
                   >
                     {social.icon}
-                  </a>
+                  </motion.a>
                 ))}
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Decorative Elements */}
+      <motion.div
+        className="absolute top-20 right-20 w-32 h-32 border border-[#fdc700]/20 rounded-full"
+        animate={{ rotate: 360 }}
+        transition={{
+          duration: 40,
+          repeat: Number.POSITIVE_INFINITY,
+          ease: "linear",
+        }}
+      />
+      <motion.div
+        className="absolute bottom-20 left-20 w-24 h-24 border border-[#fdc700]/15 rounded-full"
+        animate={{ rotate: -360 }}
+        transition={{
+          duration: 35,
+          repeat: Number.POSITIVE_INFINITY,
+          ease: "linear",
+        }}
+      />
     </footer>
   );
 };

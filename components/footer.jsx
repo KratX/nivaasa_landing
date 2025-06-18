@@ -683,6 +683,12 @@ const Footer = () => {
           </div>
         </div>
       </div>
+      <div className="font-bold text-xl">
+        Made with Love by
+        <a href="https://github.com/KratX" className="text-blue-500 ml-2">
+          Kartik
+        </a>
+      </div>
 
       {/* Decorative Elements */}
       <motion.div

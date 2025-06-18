@@ -199,6 +199,7 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
           transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
         >
           <motion.div
+            className="ml-8 flex flex-col items-center text-center"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.8, ease: "backOut" }}
@@ -209,7 +210,7 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
               transition={{ duration: 0.3 }}
             >
               <motion.div
-                className="w-16 h-16 mr-4 rounded-xl overflow-hidden flex items-center justify-center"
+                className="w-32 h-32 rounded-xl overflow-hidden flex items-center justify-center"
                 whileHover={{ rotate: 5 }}
                 transition={{ duration: 0.3 }}
               >
@@ -219,7 +220,7 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
 
             <motion.div>
               <motion.h1
-                className="text-4xl lg:text-6xl font-bold bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent tracking-wider mb-3"
+                className="text-4xl lg:text-8xl font-bold bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent tracking-wider mb-3"
                 initial={{ x: -30, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.6, duration: 0.8 }}
@@ -227,7 +228,7 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
                 NIVAASA
               </motion.h1>
               <motion.p
-                className="text-slate-300 text-lg lg:text-xl font-light tracking-wide"
+                className="text-lg lg:text-xl font-light tracking-wide bg-gradient-to-r w-full from-amber-700 via-yellow-400 to-amber-700 bg-clip-text text-transparent"
                 initial={{ x: -30, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.8, duration: 0.8 }}

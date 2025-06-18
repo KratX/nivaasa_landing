@@ -271,7 +271,7 @@ export default function Para1() {
               animate={isInView ? "visible" : "hidden"}
             >
               <motion.h2
-                className="text-sm lg:text-base font-light tracking-[0.2em] uppercase mb-2 text-gray-300"
+                className="text-sm lg:text-base font-light font-poppins tracking-[0.2em] uppercase mb-2 text-gray-300"
                 initial={{ opacity: 0, y: 20 }}
                 animate={
                   isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
@@ -286,7 +286,7 @@ export default function Para1() {
                 Legacy Rooted in Vision
               </motion.h2>
               <motion.h3
-                className="text-sm lg:text-base font-light tracking-[0.2em] uppercase text-gray-300"
+                className="text-sm lg:text-base font-light font-poppins tracking-[0.2em] uppercase text-gray-300"
                 initial={{ opacity: 0, y: 20 }}
                 animate={
                   isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
@@ -306,7 +306,7 @@ export default function Para1() {
             <div className="mb-8 lg:mb-12">
               <motion.h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light leading-tight">
                 <motion.span
-                  className="block mb-2"
+                  className="block mb-2 font-allenoire"
                   variants={titleVariants}
                   custom={0}
                   initial="hidden"
@@ -319,7 +319,7 @@ export default function Para1() {
                   Crafting
                 </motion.span>
                 <motion.span
-                  className="block text-yellow-400 font-normal mb-2"
+                  className="block text-yellow-400 font-normal font-allenoire mb-2"
                   variants={titleVariants}
                   custom={1}
                   initial="hidden"
@@ -333,7 +333,7 @@ export default function Para1() {
                   Tomorrow's
                 </motion.span>
                 <motion.span
-                  className="block"
+                  className="block font-allenoire"
                   variants={titleVariants}
                   custom={2}
                   initial="hidden"
@@ -394,10 +394,9 @@ export default function Para1() {
               animate={isInView ? "visible" : "hidden"}
             >
               <motion.p
-                className="text-base lg:text-lg font-light tracking-wide text-gray-200"
+                className="text-base lg:text-lg font-light tracking-wide bg-gradient-to-r w-full from-amber-700 via-yellow-400 to-amber-700 bg-clip-text text-transparent"
                 whileHover={{
                   scale: 1.05,
-                  color: "#ffffff",
                   textShadow: "0 0 8px rgba(255,255,255,0.5)",
                   transition: { duration: 0.3 },
                 }}

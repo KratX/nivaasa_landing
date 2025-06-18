@@ -397,7 +397,7 @@ const Footer = () => {
             >
               <ExplosiveAnimatedText
                 text="Let's Talk"
-                className="text-4xl md:text-5xl lg:text-6xl font-light mb-12"
+                className="text-4xl font-poppins md:text-5xl lg:text-6xl font-light mb-12"
                 delay={1}
                 variant="glowBurst"
                 style={{

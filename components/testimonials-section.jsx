@@ -350,7 +350,7 @@ const TestimonialsSection = () => {
           >
             <ExplosiveAnimatedText
               text="WHAT PEOPLE SAY"
-              className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-8 tracking-wider"
+              className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-allenoire font-bold mb-8 tracking-wider"
               delay={0.8}
               variant="glowExplosion"
               style={{

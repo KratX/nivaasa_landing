@@ -291,6 +291,7 @@ const ExploreSection = () => {
           {letters.map((letter, index) => (
             <motion.span
               key={index}
+              className={className} // ✅ Apply font styles to each animated letter
               variants={letterPopVariants}
               style={{
                 display: "inline-block",
@@ -469,7 +470,7 @@ const ExploreSection = () => {
           <motion.div className="mb-16">
             <AdvancedAnimatedText
               text="NIVAASA"
-              className="text-6xl md:text-8xl lg:text-9xl font-thin mb-8 tracking-wider"
+              className="text-6xl md:text-8xl font-allenoire lg:text-9xl font-thin mb-8 tracking-wider"
               delay={0.5}
               variant="glowFade"
               style={{
@@ -643,7 +644,7 @@ const ExploreSection = () => {
                   <motion.div>
                     <AdvancedAnimatedText
                       text={property.title}
-                      className="text-5xl lg:text-7xl font-thin mb-6 leading-tight"
+                      className="text-5xl lg:text-7xl font-allenoire  mb-6 leading-tight"
                       delay={0.5}
                       variant="letterPop"
                       style={{
@@ -654,7 +655,7 @@ const ExploreSection = () => {
 
                     <AdvancedAnimatedText
                       text={property.subtitle}
-                      className="text-xl font-light mb-8 text-[#fdc700]/80"
+                      className="text-xl font-light font-poppins mb-8 text-[#fdc700]/80"
                       delay={1.5}
                       variant="fadeSlide"
                     />
@@ -662,7 +663,7 @@ const ExploreSection = () => {
 
                   <AdvancedAnimatedParagraph
                     text={property.description}
-                    className="text-lg text-gray-200 leading-relaxed font-light max-w-2xl"
+                    className="text-lg text-gray-200 leading-relaxed font-safira font-light max-w-2xl"
                     delay={2}
                   />
 

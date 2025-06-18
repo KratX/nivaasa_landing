@@ -474,7 +474,7 @@ const Para2 = () => {
                 }}
               >
                 <motion.h2
-                  className="text-lg lg:text-xl font-light tracking-wide text-gray-300"
+                  className="text-lg lg:text-xl font-safira font-light tracking-wide text-gray-300"
                   whileHover={{
                     color: "#ffffff",
                     textShadow: "0 0 10px rgba(255,255,255,0.5)",
@@ -485,7 +485,7 @@ const Para2 = () => {
                 </motion.h2>
                 <motion.h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl space-x-2 font-light leading-tight">
                   <motion.span
-                    className="text-yellow-400 font-normal inline-block"
+                    className="text-yellow-400 font-normal font-allenoire inline-block"
                     variants={titleVariants}
                     custom={0}
                     whileHover={{
@@ -497,7 +497,7 @@ const Para2 = () => {
                     Looking
                   </motion.span>
                   <motion.span
-                    className="text-white inline-block"
+                    className="text-white font-allenoire inline-block"
                     variants={titleVariants}
                     custom={1}
                     whileHover={{

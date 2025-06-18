@@ -388,8 +388,8 @@ const HeroSection = () => {
                         rotateY: useTransform(springMouseX, [-50, 50], [-2, 2]),
                       }}
                     >
-                      <motion.h1
-                        className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl w-full xl:text-8xl font-bold tracking-tight leading-tight text-nowrap text-transparent bg-clip-text text-left"
+                      <motion.h3
+                        className="text-2xl sm:text-4xl md:text-5xl font-sans lg:text-6xl w-full xl:text-8xl font-bold tracking-tight leading-tight text-nowrap text-transparent bg-clip-text text-left"
                         style={{
                           backgroundImage: `url(${slide.backgroundImage})`,
                           backgroundSize: "300% 300%",
@@ -419,7 +419,7 @@ const HeroSection = () => {
                         }}
                       >
                         {slide.title}
-                      </motion.h1>
+                      </motion.h3>
                     </motion.div>
 
                     {/* Advanced Description Animation */}

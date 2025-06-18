@@ -1,1 +1,49 @@
 @import "tailwindcss";
+
+@font-face {
+  font-family: "Allenoire";
+  src: url("/fonts/allenoire/allenoire-allenoire-regular-400.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/poppins/Poppins-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Safira";
+  src: url("/fonts/safira march/Safira March Personal Use Only.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+h1,
+h2 {
+  font-family: "Allenoire", sans-serif;
+}
+
+p,
+span {
+  font-family: "Poppins", sans-serif;
+}
+
+.font-safira {
+  font-family: "Safira", sans-serif;
+}
+
+.font-poppins {
+  font-family: "Poppins", sans-serif;
+}
+
+.font-allenoire {
+  font-family: "Allenoire", sans-serif;
+}

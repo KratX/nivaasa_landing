@@ -361,23 +361,28 @@ const Footer = () => {
             transition={{ duration: 1.2, delay: 0.3 }}
             viewport={{ once: true }}
           >
-            <ExplosiveAnimatedText
-              text="Stay Updated with our Projects"
-              className="mb-6 text-3xl font-light text-white md:text-4xl lg:text-5xl"
-              delay={0.5}
-              variant="letterPop"
-            />
+            <motion.div whileHover="hover" initial="initial" animate="initial">
+              <ExplosiveAnimatedText
+                text="Stay Updated with our Projects"
+                className="mb-6 text-3xl font-light text-white cursor-pointer md:text-4xl lg:text-5xl"
+                delay={0.5}
+                variant="letterPop"
+              />
 
-            <motion.div
-              className="w-24 h-1 bg-[#fdc700]"
-              initial={{ width: 0, opacity: 0 }}
-              whileInView={{ width: 96, opacity: 1 }}
-              transition={{ duration: 1.5, delay: 1.5 }}
-              viewport={{ once: true }}
-              style={{
-                boxShadow: "0 0 15px #fdc700",
-              }}
-            />
+              <motion.div
+                className="h-1 bg-[#fdc700]"
+                initial={{ width: 0, opacity: 0 }}
+                whileInView={{ width: 700, opacity: 1 }}
+                variants={{
+                  initial: {
+                    width: 700,
+                    boxShadow: "0 0 15px #fdc700",
+                  },
+                }}
+                transition={{ duration: 1.5, delay: 1.5 }}
+                viewport={{ once: true }}
+              />
+            </motion.div>
           </motion.div>
 
           {/* Main Content Grid */}
@@ -685,6 +690,7 @@ const Footer = () => {
                   target="_blank"
                   href="https://github.com/KratX"
                   className="ml-2 text-cyan-400"
+                  rel="noreferrer"
                 >
                   Kartik
                 </a>

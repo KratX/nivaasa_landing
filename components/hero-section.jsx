@@ -39,36 +39,47 @@ const HeroSection = () => {
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { once: false, amount: 0.3 });
 
-  // Scroll-based parallax
+  // Enhanced scroll-based parallax with natural smoothing
   const { scrollY } = useScroll();
-  const backgroundY = useTransform(scrollY, [0, 1000], [0, -300]);
-  const contentY = useTransform(scrollY, [0, 1000], [0, 150]);
-  const overlayOpacity = useTransform(scrollY, [0, 500], [0.3, 0.7]);
+  const backgroundY = useTransform(scrollY, [0, 1000], [0, -200]);
+  const contentY = useTransform(scrollY, [0, 1000], [0, 100]);
+  const overlayOpacity = useTransform(scrollY, [0, 500], [0.2, 0.5]);
 
-  // Mouse tracking for advanced parallax
+  // Refined mouse tracking with smoother springs
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const springMouseX = useSpring(mouseX, { stiffness: 100, damping: 30 });
-  const springMouseY = useSpring(mouseY, { stiffness: 100, damping: 30 });
+  const springMouseX = useSpring(mouseX, {
+    stiffness: 50,
+    damping: 50,
+    mass: 0.5,
+    restDelta: 0.001,
+  });
+  const springMouseY = useSpring(mouseY, {
+    stiffness: 50,
+    damping: 50,
+    mass: 0.5,
+    restDelta: 0.001,
+  });
 
   const handleMouseMove = (e) => {
     const rect = containerRef.current?.getBoundingClientRect();
     if (rect) {
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      mouseX.set((e.clientX - rect.left - centerX) / 20);
-      mouseY.set((e.clientY - rect.top - centerY) / 20);
+      const maxMove = 30; // Reduced for subtlety
+      mouseX.set(((e.clientX - rect.left - centerX) / centerX) * maxMove);
+      mouseY.set(((e.clientY - rect.top - centerY) / centerY) * maxMove);
     }
   };
 
-  // Advanced slide variants
+  // Smoother slide variants with refined timing
   const slideVariants = {
     enter: (direction) => ({
       x: direction > 0 ? 1000 : -1000,
       opacity: 0,
-      scale: 0.8,
-      rotateY: direction > 0 ? 45 : -45,
-      filter: "blur(10px)",
+      scale: 0.95,
+      rotateY: direction > 0 ? 15 : -15,
+      filter: "blur(8px)",
     }),
     center: {
       zIndex: 1,
@@ -82,20 +93,20 @@ const HeroSection = () => {
       zIndex: 0,
       x: direction < 0 ? 1000 : -1000,
       opacity: 0,
-      scale: 1.2,
-      rotateY: direction < 0 ? 45 : -45,
-      filter: "blur(10px)",
+      scale: 1.05,
+      rotateY: direction < 0 ? 15 : -15,
+      filter: "blur(8px)",
     }),
   };
 
-  // Text animation variants
+  // Refined text animation variants with smoother transitions
   const textVariants = {
     subtitle: {
       hidden: {
-        x: -200,
+        x: -100,
         opacity: 0,
-        rotateX: -90,
-        filter: "blur(20px)",
+        rotateX: -45,
+        filter: "blur(10px)",
       },
       visible: {
         x: 0,
@@ -104,26 +115,29 @@ const HeroSection = () => {
         filter: "blur(0px)",
         transition: {
           type: "spring",
-          stiffness: 100,
-          damping: 20,
-          delay: 0.2,
-          duration: 1.2,
+          stiffness: 80,
+          damping: 25,
+          mass: 0.8,
+          delay: 0.3,
         },
       },
       exit: {
-        x: 200,
+        x: 100,
         opacity: 0,
-        rotateX: 90,
-        filter: "blur(20px)",
-        transition: { duration: 0.6 },
+        rotateX: 45,
+        filter: "blur(10px)",
+        transition: {
+          duration: 0.5,
+          ease: [0.25, 0.46, 0.45, 0.94],
+        },
       },
     },
     title: {
       hidden: {
-        y: 150,
+        y: 80,
         opacity: 0,
-        scale: 0.3,
-        filter: "blur(30px)",
+        scale: 0.8,
+        filter: "blur(15px)",
       },
       visible: {
         y: 0,
@@ -132,29 +146,29 @@ const HeroSection = () => {
         filter: "blur(0px)",
         transition: {
           type: "spring",
-          stiffness: 200,
-          damping: 15,
-          delay: 0.5,
-          duration: 1.2,
+          stiffness: 100,
+          damping: 20,
+          mass: 0.6,
+          delay: 0.6,
         },
       },
       exit: {
-        y: -100,
+        y: -50,
         opacity: 0,
-        scale: 0.8,
-        filter: "blur(20px)",
+        scale: 0.9,
+        filter: "blur(15px)",
         transition: {
-          duration: 0.6,
-          ease: "easeInOut",
+          duration: 0.5,
+          ease: [0.25, 0.46, 0.45, 0.94],
         },
       },
     },
     description: {
       hidden: {
-        x: 300,
+        x: 150,
         opacity: 0,
-        rotateY: 90,
-        filter: "blur(15px)",
+        rotateY: 45,
+        filter: "blur(8px)",
       },
       visible: {
         x: 0,
@@ -163,18 +177,21 @@ const HeroSection = () => {
         filter: "blur(0px)",
         transition: {
           type: "spring",
-          stiffness: 120,
-          damping: 25,
-          delay: 0.8,
-          duration: 1,
+          stiffness: 90,
+          damping: 30,
+          mass: 0.7,
+          delay: 0.9,
         },
       },
       exit: {
-        x: -300,
+        x: -150,
         opacity: 0,
-        rotateY: -90,
-        filter: "blur(15px)",
-        transition: { duration: 0.5 },
+        rotateY: -45,
+        filter: "blur(8px)",
+        transition: {
+          duration: 0.4,
+          ease: [0.25, 0.46, 0.45, 0.94],
+        },
       },
     },
   };
@@ -186,7 +203,7 @@ const HeroSection = () => {
     const interval = setInterval(() => {
       setSlideDirection(1);
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 6000);
+    }, 7000); // Slightly longer for better UX
 
     return () => clearInterval(interval);
   }, [isAutoPlaying, slides.length]);
@@ -234,12 +251,11 @@ const HeroSection = () => {
     setIsAutoPlaying(true);
   };
 
-  // Define these outside the component to avoid recreating them on every render
-  const dynamicScale = useTransform(scrollY, [0, 1000], [1, 1.2]);
-  const dynamicX = useTransform(springMouseX, [-50, 50], [-30, 30]);
-  const dynamicY = useTransform(springMouseY, [-50, 50], [-20, 20]);
-
-  const subtitleX = useTransform(springMouseX, [-50, 50], [-5, 5]);
+  // Smoother parallax transforms
+  const dynamicScale = useTransform(scrollY, [0, 1000], [1, 1.1]);
+  const dynamicX = useTransform(springMouseX, [-30, 30], [-15, 15]);
+  const dynamicY = useTransform(springMouseY, [-30, 30], [-10, 10]);
+  const subtitleX = useTransform(springMouseX, [-30, 30], [-3, 3]);
 
   return (
     <motion.div
@@ -251,14 +267,14 @@ const HeroSection = () => {
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      style={{ perspective: "1000px" }}
+      style={{ perspective: "1200px" }}
     >
-      {/* Advanced Parallax Background */}
+      {/* Enhanced Parallax Background */}
       <motion.div
         className="absolute inset-0 w-full h-full"
         style={{
           y: backgroundY,
-          x: useTransform(springMouseX, [-50, 50], [-20, 20]),
+          x: dynamicX,
         }}
       >
         <AnimatePresence mode="wait" custom={slideDirection}>
@@ -273,17 +289,34 @@ const HeroSection = () => {
                   animate="center"
                   exit="exit"
                   transition={{
-                    x: { type: "spring", stiffness: 300, damping: 30 },
-                    opacity: { duration: 0.8 },
-                    scale: { duration: 1.2 },
-                    rotateY: { duration: 1 },
-                    filter: { duration: 0.8 },
+                    x: {
+                      type: "spring",
+                      stiffness: 200,
+                      damping: 30,
+                      mass: 0.8,
+                    },
+                    opacity: {
+                      duration: 0.8,
+                      ease: [0.25, 0.46, 0.45, 0.94],
+                    },
+                    scale: {
+                      duration: 1,
+                      ease: [0.25, 0.46, 0.45, 0.94],
+                    },
+                    rotateY: {
+                      duration: 0.8,
+                      ease: [0.25, 0.46, 0.45, 0.94],
+                    },
+                    filter: {
+                      duration: 0.6,
+                      ease: [0.25, 0.46, 0.45, 0.94],
+                    },
                   }}
                   className="absolute inset-0 w-full h-full"
                 >
-                  {/* Dynamic Background with Advanced Parallax */}
+                  {/* Refined Background with Subtle Parallax */}
                   <motion.div
-                    className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+                    className="absolute inset-0 w-full h-full bg-center bg-no-repeat bg-cover"
                     style={{
                       backgroundImage: `url(${slide.backgroundImage})`,
                       scale: dynamicScale,
@@ -291,20 +324,24 @@ const HeroSection = () => {
                       y: dynamicY,
                     }}
                     animate={{
-                      scale: [1, 1.05, 1],
+                      scale: [1, 1.02, 1],
                     }}
                     transition={{
                       scale: {
-                        duration: 20,
+                        duration: 25,
                         repeat: Number.POSITIVE_INFINITY,
                         ease: "easeInOut",
                       },
                     }}
                   >
-                    {/* Dynamic Overlay */}
+                    {/* Smoother Overlay Animation */}
                     <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-black"
-                      style={{ opacity: overlayOpacity }}
+                      className="absolute inset-0"
+                      style={{
+                        opacity: overlayOpacity,
+                        background:
+                          "linear-gradient(45deg, rgba(0,0,0,0.3), rgba(0,0,0,0.1), rgba(0,0,0,0.3))",
+                      }}
                       animate={{
                         background: [
                           "linear-gradient(45deg, rgba(0,0,0,0.3), rgba(0,0,0,0.1), rgba(0,0,0,0.3))",
@@ -313,7 +350,7 @@ const HeroSection = () => {
                         ],
                       }}
                       transition={{
-                        duration: 8,
+                        duration: 12,
                         repeat: Number.POSITIVE_INFINITY,
                         ease: "easeInOut",
                       }}
@@ -325,21 +362,21 @@ const HeroSection = () => {
         </AnimatePresence>
       </motion.div>
 
-      {/* Advanced Content with Scroll Parallax */}
+      {/* Enhanced Content with Smooth Scroll Parallax */}
       <motion.div
-        className="relative z-10 flex flex-col justify-center items-start h-full px-4 sm:px-6 lg:px-8"
+        className="relative z-10 flex flex-col items-start justify-center h-full px-4 sm:px-6 lg:px-8"
         style={{
           y: contentY,
-          x: useTransform(springMouseX, [-50, 50], [-10, 10]),
+          x: dynamicX,
         }}
       >
-        <div className="text-left max-w-4xl ml-0 pl-8 sm:pl-12 md:pl-16 lg:pl-20">
+        <div className="max-w-4xl pl-8 ml-0 text-left sm:pl-12 md:pl-16 lg:pl-20">
           <AnimatePresence mode="wait">
             {slides.map(
               (slide, index) =>
                 index === currentSlide && (
                   <motion.div key={slide.id} className="space-y-6">
-                    {/* Advanced Subtitle Animation */}
+                    {/* Refined Subtitle Animation */}
                     <motion.div
                       variants={textVariants.subtitle}
                       initial="hidden"
@@ -351,48 +388,52 @@ const HeroSection = () => {
                       }}
                     >
                       <motion.p
-                        className="text-sm sm:text-base text-white md:text-lg font-bold tracking-wider uppercase opacity-90 text-left"
+                        className="text-sm font-bold tracking-wider text-left text-white uppercase sm:text-base md:text-lg opacity-90"
                         animate={{
                           textShadow: [
-                            "0 0 10px rgba(255,255,255,0.5)",
-                            "0 0 20px rgba(255,255,255,0.8)",
-                            "0 0 10px rgba(255,255,255,0.5)",
+                            "0 0 8px rgba(255,255,255,0.3)",
+                            "0 0 12px rgba(255,255,255,0.5)",
+                            "0 0 8px rgba(255,255,255,0.3)",
                           ],
                         }}
                         transition={{
                           textShadow: {
-                            duration: 3,
+                            duration: 4,
                             repeat: Number.POSITIVE_INFINITY,
                             ease: "easeInOut",
                           },
                         }}
                         whileHover={{
-                          scale: 1.05,
-                          x: 10,
-                          transition: { duration: 0.3 },
+                          scale: 1.02,
+                          x: 5,
+                          transition: {
+                            type: "spring",
+                            stiffness: 400,
+                            damping: 25,
+                          },
                         }}
                       >
                         {slide.subtitle}
                       </motion.p>
                     </motion.div>
 
-                    {/* Advanced Title Animation */}
+                    {/* Enhanced Title Animation */}
                     <motion.div
                       variants={textVariants.title}
                       initial="hidden"
                       animate="visible"
                       exit="exit"
-                      className="mb-6 sm:mb-8 bg-white w-fit py-1 px-10"
+                      className="px-10 py-1 mb-6 bg-white sm:mb-8 w-fit"
                       style={{
-                        rotateX: useTransform(springMouseY, [-50, 50], [-2, 2]),
-                        rotateY: useTransform(springMouseX, [-50, 50], [-2, 2]),
+                        rotateX: dynamicY,
+                        rotateY: dynamicX,
                       }}
                     >
                       <motion.h3
-                        className="text-2xl sm:text-4xl md:text-5xl font-sans lg:text-6xl w-full xl:text-8xl font-bold tracking-tight leading-tight text-nowrap text-transparent bg-clip-text text-left"
+                        className="w-full font-sans text-2xl font-bold leading-tight tracking-tight text-left text-transparent sm:text-4xl md:text-5xl lg:text-6xl xl:text-8xl text-nowrap bg-clip-text"
                         style={{
                           backgroundImage: `url(${slide.backgroundImage})`,
-                          backgroundSize: "300% 300%",
+                          backgroundSize: "200% 200%",
                           backgroundPosition: "center",
                           backgroundAttachment: "fixed",
                           WebkitBackgroundClip: "text",
@@ -403,17 +444,17 @@ const HeroSection = () => {
                         }}
                         transition={{
                           backgroundPosition: {
-                            duration: 15,
+                            duration: 20,
                             repeat: Number.POSITIVE_INFINITY,
                             ease: "linear",
                           },
                         }}
                         whileHover={{
-                          scale: 1.05,
-                          y: -5,
+                          scale: 1.02,
+                          y: -2,
                           transition: {
                             type: "spring",
-                            stiffness: 400,
+                            stiffness: 300,
                             damping: 20,
                           },
                         }}
@@ -422,35 +463,35 @@ const HeroSection = () => {
                       </motion.h3>
                     </motion.div>
 
-                    {/* Advanced Description Animation */}
+                    {/* Refined Description Animation */}
                     <motion.div
                       variants={textVariants.description}
                       initial="hidden"
                       animate="visible"
                       exit="exit"
                       style={{
-                        y: useTransform(springMouseY, [-50, 50], [-3, 3]),
+                        y: dynamicY,
                       }}
                     >
                       <motion.p
-                        className="text-gray-100 text-base sm:text-lg md:text-xl font-base max-w-2xl text-left"
+                        className="max-w-2xl text-base text-left text-gray-100 sm:text-lg md:text-xl font-base"
                         animate={{
-                          opacity: [0.8, 1, 0.8],
+                          opacity: [0.85, 1, 0.85],
                         }}
                         transition={{
                           opacity: {
-                            duration: 4,
+                            duration: 5,
                             repeat: Number.POSITIVE_INFINITY,
                             ease: "easeInOut",
                           },
                         }}
                         whileHover={{
-                          x: 15,
-                          scale: 1.02,
+                          x: 8,
+                          scale: 1.01,
                           color: "#ffffff",
                           transition: {
                             type: "spring",
-                            stiffness: 400,
+                            stiffness: 300,
                             damping: 25,
                           },
                         }}
@@ -465,43 +506,43 @@ const HeroSection = () => {
         </div>
       </motion.div>
 
-      {/* Advanced Navigation Controls */}
+      {/* Refined Navigation Controls */}
       <motion.div
-        initial={{ y: 100, opacity: 0 }}
+        initial={{ y: 50, opacity: 0 }}
         animate={{
-          y: isInView ? 0 : 50,
+          y: isInView ? 0 : 30,
           opacity: isInView ? 1 : 0,
         }}
         transition={{
           type: "spring",
-          stiffness: 100,
+          stiffness: 80,
           damping: 20,
-          delay: 1.5,
+          delay: 1.8,
         }}
-        className="hidden sm:flex absolute bottom-6 md:bottom-8 left-1/2 transform -translate-x-1/2 z-20"
+        className="absolute z-20 hidden transform -translate-x-1/2 sm:flex bottom-6 md:bottom-8 left-1/2"
         style={{
-          x: useTransform(springMouseX, [-50, 50], [-5, 5]),
+          x: dynamicX,
         }}
       >
         <div className="flex space-x-6">
           <motion.button
             onClick={prevSlide}
-            className="p-4 text-white transition-colors duration-300 rounded-full backdrop-blur-md bg-white/10 border border-white/20"
+            className="p-4 text-white transition-colors duration-300 border rounded-full backdrop-blur-md bg-white/10 border-white/20"
             whileHover={{
-              scale: 1.2,
-              rotate: -10,
-              backgroundColor: "rgba(255, 255, 255, 0.2)",
-              borderColor: "rgba(255, 255, 255, 0.4)",
-              boxShadow: "0 10px 30px rgba(255, 255, 255, 0.2)",
+              scale: 1.1,
+              rotate: -5,
+              backgroundColor: "rgba(255, 255, 255, 0.15)",
+              borderColor: "rgba(255, 255, 255, 0.3)",
+              boxShadow: "0 8px 25px rgba(255, 255, 255, 0.15)",
             }}
             whileTap={{
-              scale: 0.9,
-              rotate: -15,
+              scale: 0.95,
+              rotate: -8,
             }}
             transition={{
               type: "spring",
-              stiffness: 400,
-              damping: 17,
+              stiffness: 300,
+              damping: 20,
             }}
             aria-label="Previous slide"
           >
@@ -510,22 +551,22 @@ const HeroSection = () => {
 
           <motion.button
             onClick={nextSlide}
-            className="p-4 text-white transition-colors duration-300 rounded-full backdrop-blur-md bg-white/10 border border-white/20"
+            className="p-4 text-white transition-colors duration-300 border rounded-full backdrop-blur-md bg-white/10 border-white/20"
             whileHover={{
-              scale: 1.2,
-              rotate: 10,
-              backgroundColor: "rgba(255, 255, 255, 0.2)",
-              borderColor: "rgba(255, 255, 255, 0.4)",
-              boxShadow: "0 10px 30px rgba(255, 255, 255, 0.2)",
+              scale: 1.1,
+              rotate: 5,
+              backgroundColor: "rgba(255, 255, 255, 0.15)",
+              borderColor: "rgba(255, 255, 255, 0.3)",
+              boxShadow: "0 8px 25px rgba(255, 255, 255, 0.15)",
             }}
             whileTap={{
-              scale: 0.9,
-              rotate: 15,
+              scale: 0.95,
+              rotate: 8,
             }}
             transition={{
               type: "spring",
-              stiffness: 400,
-              damping: 17,
+              stiffness: 300,
+              damping: 20,
             }}
             aria-label="Next slide"
           >

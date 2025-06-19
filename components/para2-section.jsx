@@ -311,36 +311,10 @@ const Para2 = () => {
         }
       }
 
-      // Flowing lines
-      ctx.globalAlpha = 0.2;
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
-      ctx.lineWidth = 2;
-
-      for (let i = 0; i < 5; i++) {
-        ctx.beginPath();
-        ctx.moveTo(0, canvas.height / 2 + Math.sin(time + i) * 100);
-
-        for (let x = 0; x < canvas.width; x += 10) {
-          const y =
-            canvas.height / 2 +
-            Math.sin(time + x * 0.01 + i) * 50 +
-            Math.sin(time * 2 + x * 0.005) * 30 +
-            mouseInfluence.y * 20;
-          ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-      }
-
       animationId = requestAnimationFrame(drawAdvancedPattern);
     };
 
     drawAdvancedPattern();
-
-    return () => {
-      if (animationId) {
-        cancelAnimationFrame(animationId);
-      }
-    };
   }, [mousePosition]);
 
   // Statistics data with enhanced configuration
@@ -458,11 +432,11 @@ const Para2 = () => {
 
       {/* Main Content Container */}
       <motion.div
-        className="relative z-10 min-h-screen flex items-center"
+        className="relative z-10 flex items-center min-h-screen"
         style={{ y: contentY }}
       >
-        <div className="container mx-auto px-4 py-8 lg:py-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="container px-4 py-8 mx-auto lg:py-16">
+          <div className="grid items-center grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
             {/* Left Content Section */}
             <motion.div className="space-y-8">
               {/* Header Section */}
@@ -474,7 +448,7 @@ const Para2 = () => {
                 }}
               >
                 <motion.h2
-                  className="text-lg lg:text-xl font-safira font-light tracking-wide text-gray-300"
+                  className="text-lg font-light tracking-wide text-gray-300 lg:text-xl font-safira"
                   whileHover={{
                     color: "#ffffff",
                     textShadow: "0 0 10px rgba(255,255,255,0.5)",
@@ -483,9 +457,9 @@ const Para2 = () => {
                 >
                   Next 5 year Plan
                 </motion.h2>
-                <motion.h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl space-x-2 font-light leading-tight">
+                <motion.h1 className="space-x-2 text-4xl font-light leading-tight md:text-5xl lg:text-6xl xl:text-7xl">
                   <motion.span
-                    className="text-yellow-400 font-normal font-allenoire inline-block"
+                    className="inline-block font-normal text-yellow-400 font-allenoire"
                     variants={titleVariants}
                     custom={0}
                     whileHover={{
@@ -497,7 +471,7 @@ const Para2 = () => {
                     Looking
                   </motion.span>
                   <motion.span
-                    className="text-white font-allenoire inline-block"
+                    className="inline-block text-white font-allenoire"
                     variants={titleVariants}
                     custom={1}
                     whileHover={{
@@ -524,7 +498,7 @@ const Para2 = () => {
                 }}
               >
                 <motion.p
-                  className="text-base lg:text-lg leading-relaxed text-gray-300 font-light"
+                  className="text-base font-light leading-relaxed text-gray-300 lg:text-lg"
                   whileHover={{
                     color: "#ffffff",
                     transition: { duration: 0.3 },
@@ -537,12 +511,12 @@ const Para2 = () => {
               </motion.div>
 
               {/* Advanced Statistics Section */}
-              <div className="space-y-1 pt-8">
+              <div className="pt-8 space-y-1">
                 <AnimatePresence>
                   {statisticsData.map((stat, index) => (
                     <motion.div
                       key={stat.id}
-                      className="flex items-center space-x-6 p-4 rounded-lg cursor-pointer relative overflow-hidden"
+                      className="relative flex items-center p-4 space-x-6 overflow-hidden rounded-lg cursor-pointer"
                       variants={statVariants}
                       custom={index}
                       whileHover="hover"
@@ -573,7 +547,7 @@ const Para2 = () => {
                       </motion.div>
 
                       {/* Statistics Content */}
-                      <div className="flex-1 relative z-10">
+                      <div className="relative z-10 flex-1">
                         <div className="flex items-baseline space-x-2">
                           <motion.span
                             className={`text-4xl lg:text-5xl font-light ${stat.color} transition-colors duration-300`}
@@ -592,18 +566,18 @@ const Para2 = () => {
                           >
                             {stat.value}
                           </motion.span>
-                          <span className="text-lg lg:text-xl text-gray-300 font-light">
+                          <span className="text-lg font-light text-gray-300 lg:text-xl">
                             {stat.label}
                           </span>
                         </div>
-                        <p className="text-sm lg:text-base text-gray-400 mt-1">
+                        <p className="mt-1 text-sm text-gray-400 lg:text-base">
                           {stat.description}
                         </p>
                       </div>
 
                       {/* Advanced Hover Indicator */}
                       <motion.div
-                        className="w-2 h-8 bg-yellow-400 rounded-full relative z-10"
+                        className="relative z-10 w-2 h-8 bg-yellow-400 rounded-full"
                         initial={{ opacity: 0, scale: 0.5, x: 20 }}
                         animate={{
                           opacity: hoveredStat === stat.id ? 1 : 0,
@@ -655,11 +629,11 @@ const Para2 = () => {
 
               {/* Advanced Call to Action */}
               <motion.div className="pt-8" variants={buttonVariants}>
-                <button className="group relative px-8 py-4 border border-yellow-400/50 rounded-sm hover:border-yellow-400 transition-all duration-300 overflow-hidden">
-                  <span className="relative z-10 text-sm lg:text-base tracking-wide font-light group-hover:text-black transition-colors duration-300">
+                <button className="relative px-8 py-4 overflow-hidden transition-all duration-300 border rounded-sm group border-yellow-400/50 hover:border-yellow-400">
+                  <span className="relative z-10 text-sm font-light tracking-wide transition-colors duration-300 lg:text-base group-hover:text-black">
                     Explore Development Plans
                   </span>
-                  <div className="absolute inset-0 bg-yellow-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                  <div className="absolute inset-0 transition-transform duration-300 origin-left transform scale-x-0 bg-yellow-400 group-hover:scale-x-100" />
                 </button>
               </motion.div>
             </motion.div>
@@ -677,7 +651,7 @@ const Para2 = () => {
             >
               {/* Advanced 3D Container */}
               <motion.div
-                className="bg-transparent relative p-8 lg:p-12"
+                className="relative p-8 bg-transparent lg:p-12"
                 style={{
                   transformStyle: "preserve-3d",
                   perspective: "1000px",
@@ -696,7 +670,7 @@ const Para2 = () => {
                     ref={imageRef}
                     src="test.png"
                     alt="Detailed architectural wireframe showing modern building complex"
-                    className="w-full h-full object-contain"
+                    className="object-contain w-full h-full"
                     style={{
                       filter: useTransform(
                         scrollYProgress,
@@ -718,7 +692,7 @@ const Para2 = () => {
 
                   {/* Advanced Holographic Effect */}
                   <motion.div
-                    className="absolute inset-0 bg-gradient-to-br from-yellow-400/20 via-transparent to-blue-400/20 opacity-0"
+                    className="absolute inset-0 opacity-0 bg-gradient-to-br from-yellow-400/20 via-transparent to-blue-400/20"
                     animate={{
                       opacity: hoveredStat ? 0.3 : 0,
                       background: [
@@ -739,7 +713,7 @@ const Para2 = () => {
 
                 {/* Enhanced Technical Details Overlay */}
                 <motion.div
-                  className="absolute top-4 right-4 bg-black/90 backdrop-blur-md rounded-lg p-4 border border-yellow-400/30"
+                  className="absolute p-4 border rounded-lg top-4 right-4 bg-black/90 backdrop-blur-md border-yellow-400/30"
                   initial={{ opacity: 0, scale: 0.8, y: -20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   transition={{ delay: 1.5, duration: 0.8 }}
@@ -749,7 +723,7 @@ const Para2 = () => {
                     boxShadow: "0 10px 30px rgba(250, 204, 21, 0.2)",
                   }}
                 >
-                  <div className="text-xs text-gray-400 space-y-1">
+                  <div className="space-y-1 text-xs text-gray-400">
                     <motion.div
                       animate={{ color: hoveredStat ? "#ffffff" : "#9ca3af" }}
                       transition={{ duration: 0.3 }}
@@ -773,7 +747,7 @@ const Para2 = () => {
 
                 {/* Floating Elements */}
                 <motion.div
-                  className="absolute -top-4 -left-4 w-8 h-8 border-2 border-yellow-400/50 rounded-full"
+                  className="absolute w-8 h-8 border-2 rounded-full -top-4 -left-4 border-yellow-400/50"
                   animate={{
                     rotate: 360,
                     scale: [1, 1.2, 1],
@@ -788,7 +762,7 @@ const Para2 = () => {
                   }}
                 />
                 <motion.div
-                  className="absolute -bottom-4 -right-4 w-6 h-6 bg-yellow-400/30 rounded-full"
+                  className="absolute w-6 h-6 rounded-full -bottom-4 -right-4 bg-yellow-400/30"
                   animate={{
                     y: [0, -10, 0],
                     opacity: [0.3, 0.8, 0.3],

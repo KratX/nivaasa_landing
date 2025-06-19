@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router";
 
 const ExploreSection = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -417,7 +418,7 @@ const ExploreSection = () => {
   };
 
   const FloatingElements = () => (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden">
+    <div className="fixed inset-0 overflow-hidden pointer-events-none">
       {[...Array(15)].map((_, i) => (
         <motion.div
           key={i}
@@ -447,7 +448,7 @@ const ExploreSection = () => {
 
       {/* Hero Section */}
       <motion.section
-        className="min-h-screen flex items-center justify-center bg-black relative overflow-hidden"
+        className="relative flex items-center justify-center min-h-screen overflow-hidden bg-black"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 2 }}
@@ -462,7 +463,7 @@ const ExploreSection = () => {
         />
 
         <motion.div
-          className="text-center z-10 px-8"
+          className="z-10 px-8 text-center"
           variants={containerVariants}
           initial="hidden"
           animate={isLoaded ? "visible" : "hidden"}
@@ -470,7 +471,7 @@ const ExploreSection = () => {
           <motion.div className="mb-16">
             <AdvancedAnimatedText
               text="NIVAASA"
-              className="text-6xl md:text-8xl font-allenoire lg:text-9xl font-thin mb-8 tracking-wider"
+              className="mb-8 text-6xl font-thin tracking-wider md:text-8xl font-allenoire lg:text-9xl"
               delay={0.5}
               variant="glowFade"
               style={{
@@ -525,7 +526,7 @@ const ExploreSection = () => {
         </motion.div>
 
         <motion.div
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          className="absolute transform -translate-x-1/2 bottom-8 left-1/2"
           animate={{ y: [0, 15, 0] }}
           transition={{ duration: 2.5, repeat: Number.POSITIVE_INFINITY }}
         >
@@ -549,7 +550,7 @@ const ExploreSection = () => {
           <motion.section
             key={property.id}
             id={`section-${index}`}
-            className="min-h-screen flex items-center relative overflow-hidden bg-black"
+            className="relative flex items-center min-h-screen overflow-hidden bg-black"
             variants={sectionVariants}
             initial="hidden"
             whileInView="visible"
@@ -563,7 +564,7 @@ const ExploreSection = () => {
               viewport={{ once: true }}
             />
 
-            <div className="container mx-auto px-8 py-16 relative z-10">
+            <div className="container relative z-10 px-8 py-16 mx-auto">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-[80vh]">
                 {/* Image Section */}
                 <motion.div
@@ -644,7 +645,7 @@ const ExploreSection = () => {
                   <motion.div>
                     <AdvancedAnimatedText
                       text={property.title}
-                      className="text-5xl lg:text-7xl font-allenoire  mb-6 leading-tight"
+                      className="mb-6 text-5xl leading-tight lg:text-7xl font-allenoire"
                       delay={0.5}
                       variant="letterPop"
                       style={{
@@ -663,7 +664,7 @@ const ExploreSection = () => {
 
                   <AdvancedAnimatedParagraph
                     text={property.description}
-                    className="text-lg text-gray-200 leading-relaxed font-safira font-light max-w-2xl"
+                    className="max-w-2xl text-lg font-light leading-relaxed text-gray-200 font-safira"
                     delay={2}
                   />
 
@@ -711,7 +712,7 @@ const ExploreSection = () => {
                   </motion.div>
 
                   <motion.div
-                    className="flex flex-col sm:flex-row gap-6"
+                    className="flex flex-col gap-6 sm:flex-row"
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{
@@ -732,7 +733,9 @@ const ExploreSection = () => {
                       }}
                       whileTap={{ scale: 0.92 }}
                     >
-                      <span className="relative z-10">DISCOVER MORE</span>
+                      <Link to="/properties">
+                        <span className="relative z-10">DISCOVER MORE</span>
+                      </Link>
                       <motion.div
                         className="absolute inset-0 bg-gradient-to-r from-[#fdc700]/80 to-[#fdc700]"
                         initial={{ x: "-100%" }}
@@ -782,14 +785,14 @@ const ExploreSection = () => {
 
       {/* Footer Section */}
       <motion.section
-        className="min-h-screen flex items-center justify-center bg-gradient-to-t from-black via-gray-900 to-black relative overflow-hidden"
+        className="relative flex items-center justify-center min-h-screen overflow-hidden bg-gradient-to-t from-black via-gray-900 to-black"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 2 }}
         viewport={{ once: true }}
       >
         <motion.div
-          className="text-center z-10 px-8"
+          className="z-10 px-8 text-center"
           initial={{ opacity: 0, y: 60 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.5 }}
@@ -797,7 +800,7 @@ const ExploreSection = () => {
         >
           <AdvancedAnimatedText
             text="BEGIN YOUR JOURNEY"
-            className="text-6xl md:text-8xl font-thin mb-12 tracking-wider"
+            className="mb-12 text-6xl font-thin tracking-wider md:text-8xl"
             delay={0.3}
             variant="glowFade"
             style={{

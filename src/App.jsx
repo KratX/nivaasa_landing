@@ -12,6 +12,7 @@ import PropertyShowcase from "../components/properties-section";
 import TestimonialsSection from "../components/testimonials-section";
 import VisionSection from "../components/vision-section";
 import WhyNivaasaSection from "../components/why-section";
+import ScrollToTopWithTransition from "../components/Scroll-up";
 
 // const MainApp = () => {
 //   return (
@@ -83,12 +84,14 @@ const BlogPage = () => {
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/properties" element={<PropertyPage />} />
-        <Route path="/blog" element={<BlogPage />} />
-      </Routes>
+      <ScrollToTopWithTransition>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/properties" element={<PropertyPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+        </Routes>
+      </ScrollToTopWithTransition>
     </Router>
   );
 }

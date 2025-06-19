@@ -298,7 +298,7 @@ const Footer = () => {
   ];
 
   const FloatingParticles = () => (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {[...Array(25)].map((_, i) => (
         <motion.div
           key={i}
@@ -323,7 +323,7 @@ const Footer = () => {
   );
 
   return (
-    <footer className="relative bg-black text-white overflow-hidden">
+    <footer className="relative overflow-hidden text-white bg-black">
       <FloatingParticles />
 
       {/* Static Background Pattern */}
@@ -352,7 +352,7 @@ const Footer = () => {
         />
 
         {/* Main Footer Section */}
-        <div className="container mx-auto px-6 py-16">
+        <div className="container px-6 py-16 mx-auto">
           {/* Header */}
           <motion.div
             className="mb-20"
@@ -363,7 +363,7 @@ const Footer = () => {
           >
             <ExplosiveAnimatedText
               text="Stay Updated with our Projects"
-              className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-6"
+              className="mb-6 text-3xl font-light text-white md:text-4xl lg:text-5xl"
               delay={0.5}
               variant="letterPop"
             />
@@ -381,7 +381,7 @@ const Footer = () => {
           </motion.div>
 
           {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+          <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-24">
             {/* Left Section - Newsletter */}
             <motion.div
               initial={{ opacity: 0, x: -60, scale: 0.9 }}
@@ -397,7 +397,7 @@ const Footer = () => {
             >
               <ExplosiveAnimatedText
                 text="Let's Talk"
-                className="text-4xl font-poppins md:text-5xl lg:text-6xl font-light mb-12"
+                className="mb-12 text-4xl font-light font-poppins md:text-5xl lg:text-6xl"
                 delay={1}
                 variant="glowBurst"
                 style={{
@@ -415,7 +415,7 @@ const Footer = () => {
                 transition={{ duration: 1, delay: 1.5 }}
                 viewport={{ once: true }}
               >
-                <div className="flex flex-col sm:flex-row gap-6">
+                <div className="flex flex-col gap-6 sm:flex-row">
                   <div className="flex-1">
                     <motion.input
                       type="email"
@@ -448,7 +448,7 @@ const Footer = () => {
 
               <ExplosiveAnimatedParagraph
                 text="Don't worry, we won't spam your inbox"
-                className="text-gray-400 text-sm"
+                className="text-sm text-gray-400"
                 delay={2}
               />
             </motion.div>
@@ -476,7 +476,7 @@ const Footer = () => {
               >
                 <ExplosiveAnimatedParagraph
                   text="Elan Tower, Golf course Road, sector 42, Gurgaon, 122002"
-                  className="text-white text-lg leading-relaxed"
+                  className="text-lg leading-relaxed text-white"
                   delay={1.5}
                 />
               </motion.div>
@@ -491,7 +491,7 @@ const Footer = () => {
                 >
                   <ExplosiveAnimatedText
                     text="EMAIL US"
-                    className="font-bold mb-3 tracking-wide"
+                    className="mb-3 font-bold tracking-wide"
                     delay={2}
                     variant="cascade"
                     style={{
@@ -519,7 +519,7 @@ const Footer = () => {
                 >
                   <ExplosiveAnimatedText
                     text="CALL US"
-                    className="font-bold mb-3 tracking-wide"
+                    className="mb-3 font-bold tracking-wide"
                     delay={2.4}
                     variant="cascade"
                     style={{
@@ -545,10 +545,10 @@ const Footer = () => {
 
         {/* Bottom Section */}
         <div className="border-t border-gray-800">
-          <div className="container mx-auto px-6 py-8">
+          <div className="container px-6 py-8 mx-auto">
             {/* Navigation Links */}
             <motion.div
-              className="flex flex-wrap justify-center lg:justify-start gap-8 mb-10"
+              className="flex flex-wrap justify-center gap-8 mb-10 lg:justify-start"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.5 }}
@@ -575,10 +575,10 @@ const Footer = () => {
             </motion.div>
 
             {/* Bottom Row */}
-            <div className="flex flex-col lg:flex-row justify-between items-center gap-8">
+            <div className="flex flex-col items-center justify-between gap-8 lg:flex-row">
               {/* Copyright */}
               <motion.div
-                className="text-gray-400 text-sm text-center lg:text-left"
+                className="text-sm text-center text-gray-400 lg:text-left"
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 1 }}
@@ -612,7 +612,7 @@ const Footer = () => {
               >
                 <div className="flex items-center mb-2">
                   <motion.div
-                    className="w-12 h-12 rounded-full flex items-center justify-center mr-3"
+                    className="flex items-center justify-center w-12 h-12 mr-3 rounded-full"
                     whileHover={{
                       scale: 1.1,
                       boxShadow: "0 0 20px rgba(253, 199, 0, 0.5)",
@@ -626,7 +626,7 @@ const Footer = () => {
                   <div>
                     <ExplosiveAnimatedText
                       text="NIVAASA"
-                      className="font-bold text-xl tracking-wider"
+                      className="text-xl font-bold tracking-wider"
                       delay={1.8}
                       variant="letterPop"
                       style={{
@@ -636,7 +636,7 @@ const Footer = () => {
                     />
                     <ExplosiveAnimatedText
                       text="Beyond Spaces. Building Legacies"
-                      className="text-gray-400 text-xs"
+                      className="text-xs text-gray-400"
                       delay={2.2}
                       variant="cascade"
                     />
@@ -679,15 +679,19 @@ const Footer = () => {
                   </motion.a>
                 ))}
               </motion.div>
+              <div className="font-serif text-xl italic font-extrabold text-amber-300">
+                Made with Love by
+                <a
+                  target="_blank"
+                  href="https://github.com/KratX"
+                  className="ml-2 text-cyan-400"
+                >
+                  Kartik
+                </a>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="font-bold text-xl">
-        Made with Love by
-        <a href="https://github.com/KratX" className="text-blue-500 ml-2">
-          Kartik
-        </a>
       </div>
 
       {/* Decorative Elements */}

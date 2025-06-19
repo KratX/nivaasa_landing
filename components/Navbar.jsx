@@ -12,9 +12,121 @@ import { useLocation, useNavigate } from "react-router-dom";
 const NavigationOverlay = ({ isOpen, onClose }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
+  const [heightBreakpoint, setHeightBreakpoint] = useState("medium");
   const canvasRef = useRef(null);
   const animationFrameRef = useRef(null);
   const navigate = useNavigate();
+
+  // Custom height breakpoints
+  useEffect(() => {
+    const updateHeightBreakpoint = () => {
+      const height = window.innerHeight;
+      if (height < 500) {
+        setHeightBreakpoint("xs"); // Very short - landscape mobile
+      } else if (height < 600) {
+        setHeightBreakpoint("sm"); // Short - portrait mobile
+      } else if (height < 750) {
+        setHeightBreakpoint("md"); // Medium - tablets
+      } else if (height < 900) {
+        setHeightBreakpoint("lg"); // Large - small laptops
+      } else {
+        setHeightBreakpoint("xl"); // Extra large - desktop
+      }
+    };
+
+    updateHeightBreakpoint();
+    window.addEventListener("resize", updateHeightBreakpoint);
+    return () => window.removeEventListener("resize", updateHeightBreakpoint);
+  }, []);
+
+  // Height-based responsive values
+  const getResponsiveValues = () => {
+    const values = {
+      xs: {
+        // < 500px height
+        headerHeight: "120px",
+        headerMinHeight: "100px",
+        headerMaxHeight: "140px",
+        logoSize: "w-12 h-12",
+        titleSize: "text-lg sm:text-xl",
+        subtitleSize: "text-xs sm:text-sm",
+        navTextSize: "text-lg sm:text-xl md:text-2xl",
+        ctaTextSize: "text-lg sm:text-xl",
+        spacing: "space-y-1",
+        padding: "p-3",
+        buttonSize: "px-4 py-2 text-sm",
+        socialSize: "w-8 h-8",
+        gridGap: "gap-4",
+      },
+      sm: {
+        // 500-600px height
+        headerHeight: "140px",
+        headerMinHeight: "120px",
+        headerMaxHeight: "160px",
+        logoSize: "w-14 h-14 sm:w-16 sm:h-16",
+        titleSize: "text-xl sm:text-2xl md:text-3xl",
+        subtitleSize: "text-sm sm:text-base",
+        navTextSize: "text-xl sm:text-2xl md:text-3xl",
+        ctaTextSize: "text-xl sm:text-2xl",
+        spacing: "space-y-2",
+        padding: "p-4",
+        buttonSize: "px-5 py-2.5 text-base",
+        socialSize: "w-9 h-9",
+        gridGap: "gap-5",
+      },
+      md: {
+        // 600-750px height
+        headerHeight: "180px",
+        headerMinHeight: "160px",
+        headerMaxHeight: "200px",
+        logoSize: "w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20",
+        titleSize: "text-2xl sm:text-3xl md:text-4xl",
+        subtitleSize: "text-sm sm:text-base md:text-lg",
+        navTextSize: "text-xl sm:text-2xl md:text-3xl lg:text-4xl",
+        ctaTextSize: "text-xl sm:text-2xl md:text-3xl",
+        spacing: "space-y-2 sm:space-y-3",
+        padding: "p-4 sm:p-6",
+        buttonSize: "px-6 py-3 text-base sm:text-lg",
+        socialSize: "w-10 h-10 sm:w-11 sm:h-11",
+        gridGap: "gap-6",
+      },
+      lg: {
+        // 750-900px height
+        headerHeight: "220px",
+        headerMinHeight: "200px",
+        headerMaxHeight: "240px",
+        logoSize: "w-18 h-18 sm:w-20 sm:h-20 md:w-24 md:h-24",
+        titleSize: "text-2xl sm:text-3xl md:text-4xl lg:text-5xl",
+        subtitleSize: "text-sm sm:text-base md:text-lg",
+        navTextSize: "text-xl sm:text-2xl md:text-3xl lg:text-4xl",
+        ctaTextSize: "text-xl sm:text-2xl md:text-3xl lg:text-4xl",
+        spacing: "space-y-3 sm:space-y-4",
+        padding: "p-6 sm:p-8",
+        buttonSize: "px-6 py-3 text-base sm:px-8 sm:py-4 sm:text-lg",
+        socialSize: "w-10 h-10 sm:w-12 sm:h-12",
+        gridGap: "gap-8",
+      },
+      xl: {
+        // > 900px height
+        headerHeight: "280px",
+        headerMinHeight: "240px",
+        headerMaxHeight: "320px",
+        logoSize: "w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28",
+        titleSize: "text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl",
+        subtitleSize: "text-sm sm:text-base md:text-lg",
+        navTextSize: "text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl",
+        ctaTextSize: "text-xl sm:text-2xl md:text-3xl lg:text-4xl",
+        spacing: "space-y-3 sm:space-y-4 md:space-y-5",
+        padding: "p-6 sm:p-8 md:p-10",
+        buttonSize: "px-6 py-3 text-base sm:px-8 sm:py-4 sm:text-lg",
+        socialSize: "w-10 h-10 sm:w-12 sm:h-12",
+        gridGap: "gap-10",
+      },
+    };
+    return values[heightBreakpoint] || values.md;
+  };
+
+  const responsive = getResponsiveValues();
 
   useEffect(() => {
     if (isOpen) {
@@ -40,11 +152,39 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
 
     const ctx = canvas.getContext("2d");
     const particles = [];
-    const particleCount = 80;
+
+    // Responsive particle count based on screen size and height
+    const getParticleCount = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const area = width * height;
+
+      if (area < 300000) return 20; // Very small screens
+      if (area < 500000) return 30; // Small screens
+      if (area < 800000) return 40; // Medium screens
+      if (area < 1200000) return 50; // Large screens
+      return 60; // Very large screens
+    };
+
+    let particleCount = getParticleCount();
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      particleCount = getParticleCount();
+
+      // Reinitialize particles on resize
+      particles.length = 0;
+      for (let i = 0; i < particleCount; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5,
+          size: Math.random() * 2 + 1,
+          opacity: Math.random() * 0.5 + 0.2,
+        });
+      }
     };
 
     resizeCanvas();
@@ -64,6 +204,10 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
     const drawParticles = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+      // Responsive connection distance
+      const connectionDistance =
+        window.innerWidth < 768 ? 80 : window.innerHeight < 600 ? 100 : 150;
+
       // Draw connecting lines
       ctx.strokeStyle = "rgba(255, 215, 0, 0.1)";
       ctx.lineWidth = 0.5;
@@ -74,7 +218,7 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
           const dy = particles[i].y - particles[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 150) {
+          if (distance < connectionDistance) {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
@@ -123,7 +267,11 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
     {
       name: "Facebook",
       icon: (
-        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+        <svg
+          className="w-4 h-4 sm:w-5 sm:h-5"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
         </svg>
       ),
@@ -132,7 +280,11 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
     {
       name: "Instagram",
       icon: (
-        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+        <svg
+          className="w-4 h-4 sm:w-5 sm:h-5"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
         </svg>
       ),
@@ -141,7 +293,11 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
     {
       name: "LinkedIn",
       icon: (
-        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+        <svg
+          className="w-4 h-4 sm:w-5 sm:h-5"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
         </svg>
       ),
@@ -193,36 +349,72 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
         transition={{ delay: 0.3, duration: 1 }}
       />
 
-      <div className="relative z-10 h-full flex flex-col">
+      {/* Container with height-responsive layout */}
+      <div
+        className="relative z-10"
+        style={{
+          width: "100%",
+          height: "100vh",
+          height: "100dvh",
+          maxHeight: "100vh",
+          maxHeight: "100dvh",
+          overflow: "hidden",
+          position: "relative",
+        }}
+      >
+        {/* Header - Height-responsive */}
         <motion.div
-          className="flex justify-between items-start p-6 lg:p-12"
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
+          className={responsive.padding}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: responsive.headerHeight,
+            minHeight: responsive.headerMinHeight,
+            maxHeight: responsive.headerMaxHeight,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            boxSizing: "border-box",
+          }}
         >
           <motion.div
-            className="ml-8 flex flex-col items-center text-center"
+            className="flex flex-col items-center text-center md:mt-20 md:ml-20 lg:mt-22 lg:ml-22"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.8, ease: "backOut" }}
           >
             <motion.div
-              className="flex items-center mb-6"
+              className={`flex items-center ${
+                heightBreakpoint === "xs" ? "mb-1" : "mb-2"
+              }`}
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.3 }}
             >
               <motion.div
-                className="w-32 h-32 rounded-xl overflow-hidden flex items-center justify-center"
+                className={`flex items-center justify-center overflow-hidden rounded-xl ${responsive.logoSize}`}
                 whileHover={{ rotate: 5 }}
                 transition={{ duration: 0.3 }}
               >
-                <img src="logo.png" alt="" />
+                <img
+                  src="logo.png"
+                  alt=""
+                  className="object-contain w-full h-full"
+                />
               </motion.div>
             </motion.div>
 
             <motion.div>
               <motion.h1
-                className="text-4xl lg:text-8xl font-bold bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent tracking-wider mb-3"
+                className={`${
+                  heightBreakpoint === "xs" ? "mb-0" : "mb-1"
+                } font-bold tracking-wider text-transparent bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text ${
+                  responsive.titleSize
+                }`}
                 initial={{ x: -30, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.6, duration: 0.8 }}
@@ -230,7 +422,7 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
                 NIVAASA
               </motion.h1>
               <motion.p
-                className="text-lg lg:text-xl font-light tracking-wide bg-gradient-to-r w-full from-amber-700 via-yellow-400 to-amber-700 bg-clip-text text-transparent"
+                className={`w-full font-light tracking-wide text-transparent bg-gradient-to-r from-amber-700 via-yellow-400 to-amber-700 bg-clip-text ${responsive.subtitleSize}`}
                 initial={{ x: -30, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.8, duration: 0.8 }}
@@ -242,7 +434,11 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
 
           <motion.button
             onClick={onClose}
-            className="group relative w-12 h-12 flex items-center justify-center text-white hover:text-amber-400 transition-all duration-300 rounded-full border border-white/20 hover:border-amber-400/50 backdrop-blur-sm"
+            className={`relative flex items-center justify-center text-white transition-all duration-300 border rounded-full group hover:text-amber-400 border-white/20 hover:border-amber-400/50 backdrop-blur-sm ${
+              heightBreakpoint === "xs"
+                ? "w-8 h-8"
+                : "w-10 h-10 sm:w-12 sm:h-12"
+            }`}
             whileHover={{ scale: 1.1, rotate: 90 }}
             whileTap={{ scale: 0.9 }}
             initial={{ scale: 0, rotate: -90 }}
@@ -250,11 +446,13 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
             transition={{ delay: 0.5, duration: 0.5, ease: "backOut" }}
           >
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-amber-400/20 to-transparent rounded-full opacity-0 group-hover:opacity-100"
+              className="absolute inset-0 rounded-full opacity-0 bg-gradient-to-r from-amber-400/20 to-transparent group-hover:opacity-100"
               transition={{ duration: 0.3 }}
             />
             <svg
-              className="w-6 h-6 relative z-10"
+              className={`relative z-10 ${
+                heightBreakpoint === "xs" ? "w-4 h-4" : "w-5 h-5 sm:w-6 sm:h-6"
+              }`}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -269,21 +467,40 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
           </motion.button>
         </motion.div>
 
-        <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 px-6 lg:px-12 pb-12">
+        {/* Content - Height-responsive */}
+        <div
+          className={`grid grid-cols-1 md:grid-cols-2 ${responsive.gridGap} ${responsive.padding}`}
+          style={{
+            position: "absolute",
+            top: responsive.headerHeight,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            minHeight: `calc(100vh - ${responsive.headerHeight})`,
+            maxHeight: `calc(100vh - ${responsive.headerMinHeight})`,
+            boxSizing: "border-box",
+            alignItems: "center",
+          }}
+        >
+          {/* Navigation Section */}
           <motion.div
-            className="flex flex-col justify-center"
+            className="flex flex-col justify-center order-2 md:order-1"
             initial={{ x: -100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.8, ease: "easeOut" }}
           >
             <motion.div
-              className="w-32 h-px bg-gradient-to-r from-amber-400 to-transparent mb-12"
+              className={`${
+                heightBreakpoint === "xs"
+                  ? "w-12 h-px mb-2"
+                  : "w-16 h-px mb-4 sm:w-20 md:w-24 sm:mb-6"
+              } bg-gradient-to-r from-amber-400 to-transparent`}
               initial={{ width: 0 }}
-              animate={{ width: 128 }}
+              animate={{ width: "auto" }}
               transition={{ delay: 1, duration: 1 }}
             />
 
-            <nav className="space-y-6">
+            <nav className={responsive.spacing}>
               {navigationItems.map((item, index) => (
                 <motion.div
                   key={index}
@@ -296,8 +513,8 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
                     onClick={() => handleNavClick(item)}
                     onMouseEnter={() => setHoveredItem(index)}
                     onMouseLeave={() => setHoveredItem(null)}
-                    className="relative text-4xl lg:text-5xl xl:text-6xl font-light text-left transition-all duration-500 group-hover:text-amber-400"
-                    whileHover={{ x: 20, scale: 1.02 }}
+                    className={`relative w-full font-light text-left transition-all duration-500 group-hover:text-amber-400 ${responsive.navTextSize}`}
+                    whileHover={{ x: 10, scale: 1.02 }}
                     transition={{ duration: 0.3, ease: "easeOut" }}
                   >
                     <motion.span
@@ -321,7 +538,11 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
                     </motion.span>
 
                     <motion.div
-                      className="absolute -left-8 top-1/2 w-4 h-4 bg-amber-400 rounded-full transform -translate-y-1/2"
+                      className={`absolute transform -translate-y-1/2 rounded-full top-1/2 bg-amber-400 ${
+                        heightBreakpoint === "xs"
+                          ? "w-1.5 h-1.5 -left-3"
+                          : "w-2 h-2 -left-4 sm:-left-6 md:-left-8 sm:w-3 sm:h-3 md:w-4 md:h-4"
+                      }`}
                       initial={{ scale: 0, x: -10 }}
                       animate={{
                         scale: hoveredItem === index ? 1 : 0,
@@ -342,35 +563,50 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
             </nav>
           </motion.div>
 
+          {/* CTA Section */}
           <motion.div
-            className="flex flex-col justify-center"
+            className="flex flex-col justify-center order-1 md:order-2"
             initial={{ x: 100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.8, ease: "easeOut" }}
           >
             <motion.div
-              className="w-32 h-px bg-gradient-to-r from-amber-400 to-transparent mb-12"
+              className={`${
+                heightBreakpoint === "xs"
+                  ? "w-12 h-px mb-2"
+                  : "w-16 h-px mb-4 sm:w-20 md:w-24 sm:mb-6"
+              } bg-gradient-to-r from-amber-400 to-transparent md:ml-auto`}
               initial={{ width: 0 }}
-              animate={{ width: 128 }}
+              animate={{ width: "auto" }}
               transition={{ delay: 1.2, duration: 1 }}
             />
 
-            <div className="space-y-8">
+            <div
+              className={
+                heightBreakpoint === "xs"
+                  ? "space-y-2"
+                  : "space-y-3 sm:space-y-4"
+              }
+            >
               <motion.h2
-                className="text-3xl lg:text-4xl xl:text-5xl font-light leading-tight"
+                className={`font-light leading-tight ${responsive.ctaTextSize}`}
                 initial={{ y: 30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 1, duration: 0.8 }}
               >
                 <span className="text-white">Know More</span>
                 <br />
-                <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
+                <span className="text-transparent bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text">
                   About Projects?
                 </span>
               </motion.h2>
 
               <motion.p
-                className="text-slate-300 text-lg lg:text-xl leading-relaxed max-w-lg font-light"
+                className={`max-w-lg font-light leading-relaxed text-slate-300 ${
+                  heightBreakpoint === "xs"
+                    ? "text-xs"
+                    : "text-sm sm:text-base md:text-lg"
+                }`}
                 initial={{ y: 30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 1.2, duration: 0.8 }}
@@ -382,7 +618,7 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
 
               <motion.button
                 onClick={handleCTAClick}
-                className="group relative bg-gradient-to-r from-amber-400 to-yellow-500 text-black px-8 py-4 font-bold text-lg tracking-wider rounded-lg overflow-hidden"
+                className={`relative overflow-hidden font-bold tracking-wider text-black rounded-lg group bg-gradient-to-r from-amber-400 to-yellow-500 ${responsive.buttonSize}`}
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 initial={{ y: 30, opacity: 0 }}
@@ -399,7 +635,11 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
               </motion.button>
 
               <motion.div
-                className="flex space-x-6 pt-8"
+                className={`flex space-x-4 ${
+                  heightBreakpoint === "xs"
+                    ? "pt-2"
+                    : "pt-3 sm:space-x-6 sm:pt-4"
+                }`}
                 initial={{ y: 30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 1.6, duration: 0.8 }}
@@ -410,7 +650,7 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative w-12 h-12 bg-white/10 backdrop-blur-sm text-white rounded-full flex items-center justify-center border border-white/20 hover:border-amber-400/50 transition-all duration-300"
+                    className={`relative flex items-center justify-center text-white transition-all duration-300 border rounded-full group bg-white/10 backdrop-blur-sm border-white/20 hover:border-amber-400/50 ${responsive.socialSize}`}
                     whileHover={{ scale: 1.1, y: -2 }}
                     whileTap={{ scale: 0.9 }}
                     initial={{ scale: 0, rotate: -180 }}
@@ -422,10 +662,10 @@ const NavigationOverlay = ({ isOpen, onClose }) => {
                     }}
                   >
                     <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-amber-400/20 to-transparent rounded-full opacity-0 group-hover:opacity-100"
+                      className="absolute inset-0 rounded-full opacity-0 bg-gradient-to-r from-amber-400/20 to-transparent group-hover:opacity-100"
                       transition={{ duration: 0.3 }}
                     />
-                    <span className="relative z-10 group-hover:text-amber-400 transition-colors duration-300">
+                    <span className="relative z-10 transition-colors duration-300 group-hover:text-amber-400">
                       {social.icon}
                     </span>
                   </motion.a>
@@ -501,7 +741,7 @@ const ElegantNavbar = () => {
           backdropFilter: `blur(${isMobileMenuOpen ? 4 : headerBlur}px)`,
           opacity: headerOpacity,
         }}
-        className="fixed top-0 bg-black/90 left-0 right-0 z-50 transition-all duration-700"
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-700 bg-black/90"
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
@@ -513,7 +753,7 @@ const ElegantNavbar = () => {
           transition={{ duration: 0.5 }}
         />
 
-        <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container relative px-4 mx-auto sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Logo Section */}
             <motion.div
@@ -525,7 +765,7 @@ const ElegantNavbar = () => {
               onClick={handleLogoClick}
             >
               <motion.div
-                className="relative w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center"
+                className="relative flex items-center justify-center w-10 h-10 overflow-hidden rounded-xl"
                 whileHover={{ rotate: 10, scale: 1.1 }}
                 transition={{ duration: 0.3 }}
               >
@@ -534,7 +774,7 @@ const ElegantNavbar = () => {
 
               <motion.div>
                 <motion.h1
-                  className="text-2xl font-bold tracking-wider bg-gradient-to-r from-white via-amber-100 to-white bg-clip-text text-transparent"
+                  className="text-2xl font-bold tracking-wider text-transparent bg-gradient-to-r from-white via-amber-100 to-white bg-clip-text"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.5, duration: 0.8 }}
@@ -542,7 +782,7 @@ const ElegantNavbar = () => {
                   NIVAASA
                 </motion.h1>
                 <motion.div
-                  className="h-px bg-gradient-to-r from-transparent via-amber-400 to-transparent opacity-0 group-hover:opacity-100"
+                  className="h-px opacity-0 bg-gradient-to-r from-transparent via-amber-400 to-transparent group-hover:opacity-100"
                   transition={{ duration: 0.3 }}
                 />
               </motion.div>
@@ -550,7 +790,7 @@ const ElegantNavbar = () => {
 
             {/* Desktop Navigation */}
             <motion.nav
-              className="hidden lg:flex items-center space-x-8"
+              className="items-center hidden space-x-8 lg:flex"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.8 }}
@@ -574,7 +814,7 @@ const ElegantNavbar = () => {
                   >
                     {!item.active && (
                       <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-white/10 to-white/5 rounded-full opacity-0"
+                        className="absolute inset-0 rounded-full opacity-0 bg-gradient-to-r from-white/10 to-white/5"
                         whileHover={{ opacity: 1 }}
                         transition={{ duration: 0.3 }}
                       />
@@ -584,7 +824,7 @@ const ElegantNavbar = () => {
 
                     {!item.active && (
                       <motion.div
-                        className="absolute bottom-0 left-1/2 h-px bg-gradient-to-r from-transparent via-amber-400 to-transparent transform -translate-x-1/2"
+                        className="absolute bottom-0 h-px transform -translate-x-1/2 left-1/2 bg-gradient-to-r from-transparent via-amber-400 to-transparent"
                         initial={{ width: 0 }}
                         whileHover={{ width: "100%" }}
                         transition={{ duration: 0.3 }}
@@ -597,7 +837,7 @@ const ElegantNavbar = () => {
 
             {/* Desktop Menu Button */}
             <motion.button
-              className="hidden lg:flex items-center space-x-3 px-4 py-2 rounded-full border border-white/20 hover:border-amber-400/50 backdrop-blur-sm transition-all duration-300 group"
+              className="items-center hidden px-4 py-2 space-x-3 transition-all duration-300 border rounded-full lg:flex border-white/20 hover:border-amber-400/50 backdrop-blur-sm group"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               initial={{ opacity: 0, x: 20 }}
@@ -606,11 +846,11 @@ const ElegantNavbar = () => {
               onClick={() => setIsNavigationOverlayOpen(true)}
             >
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-amber-400/10 to-transparent rounded-full opacity-0 group-hover:opacity-100"
+                className="absolute inset-0 rounded-full opacity-0 bg-gradient-to-r from-amber-400/10 to-transparent group-hover:opacity-100"
                 transition={{ duration: 0.3 }}
               />
 
-              <motion.div className="flex flex-col space-y-1 relative z-10">
+              <motion.div className="relative z-10 flex flex-col space-y-1">
                 {[14, 18, 16].map((width, index) => (
                   <motion.div
                     key={index}
@@ -626,7 +866,7 @@ const ElegantNavbar = () => {
               </motion.div>
 
               <motion.span
-                className="text-xs font-semibold tracking-wider text-white group-hover:text-amber-400 transition-colors duration-300 relative z-10"
+                className="relative z-10 text-xs font-semibold tracking-wider text-white transition-colors duration-300 group-hover:text-amber-400"
                 whileHover={{ x: 2 }}
                 transition={{ duration: 0.2 }}
               >
@@ -645,7 +885,7 @@ const ElegantNavbar = () => {
               transition={{ delay: 0.5, duration: 0.5, ease: "backOut" }}
             >
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-amber-400/10 to-transparent rounded-xl opacity-0 group-hover:opacity-100"
+                className="absolute inset-0 opacity-0 bg-gradient-to-r from-amber-400/10 to-transparent rounded-xl group-hover:opacity-100"
                 transition={{ duration: 0.3 }}
               />
 
@@ -675,7 +915,7 @@ const ElegantNavbar = () => {
                 />
               </div>
 
-              <span className="text-xs font-medium text-white tracking-wider relative z-10">
+              <span className="relative z-10 text-xs font-medium tracking-wider text-white">
                 MENU
               </span>
             </motion.button>
@@ -738,7 +978,7 @@ const ElegantNavbar = () => {
                       }}
                       whileHover={{ x: 10, scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="px-6 py-4 text-base font-medium tracking-wide rounded-xl transition-all duration-300 text-amber-400 hover:bg-amber-400/10 border border-amber-400/30"
+                      className="px-6 py-4 text-base font-medium tracking-wide transition-all duration-300 border rounded-xl text-amber-400 hover:bg-amber-400/10 border-amber-400/30"
                     >
                       <div className="flex items-center justify-between">
                         <span>FULL MENU</span>
@@ -765,7 +1005,7 @@ const ElegantNavbar = () => {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            className="lg:hidden fixed inset-0 bg-black/40 z-40"
+            className="fixed inset-0 z-40 lg:hidden bg-black/40"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
